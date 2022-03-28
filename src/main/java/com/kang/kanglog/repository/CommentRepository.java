@@ -1,12 +1,17 @@
 package com.kang.kanglog.repository;
 
 import com.kang.kanglog.domain.Comment;
+import com.kang.kanglog.domain.QComment;
+import com.kang.kanglog.domain.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.Optional;
+
+import static com.kang.kanglog.domain.QComment.*;
+import static com.kang.kanglog.domain.QUser.user;
 
 
 @Slf4j
@@ -24,7 +29,15 @@ public class CommentRepository {
 
     public Optional<Comment> findById(Long id) {
 
-        return null;
+        Optional<Comment> commentEntity = Optional.ofNullable(queryFactory
+                .selectFrom(comment)
+                        .fetchJoin()
+                .where(
+                        comment.id.eq(id)
+                )
+                .fetchOne());
+
+        return commentEntity;
     }
 
     public void deleteById(Long id) {
@@ -32,9 +45,8 @@ public class CommentRepository {
 
     }
 
-    public Comment save(Comment comment) {
+    public void save(Comment comment) {
 
-
-        return null;
+        em.merge(comment);
     }
 }

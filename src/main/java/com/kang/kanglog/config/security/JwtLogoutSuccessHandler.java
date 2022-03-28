@@ -43,6 +43,8 @@ public class JwtLogoutSuccessHandler implements LogoutSuccessHandler {
 
             if(refreshJwt != null){
                 log.info("logout이 되면...");
+                
+                //redis 유저정보 삭제
                 redisService.deleteData(refreshJwt);
 
                 Cookie accessNullToken = utilManager.createNullCookie(JwtProperties.ACCESS_TOKEN_NAME);
@@ -51,7 +53,8 @@ public class JwtLogoutSuccessHandler implements LogoutSuccessHandler {
                 response.addCookie(accessNullToken);
                 response.addCookie(refreshNullToken);
 
-                CMResDto<?> cmRespDto = new CMResDto(1,"로그아웃되었습니다.",null);;
+                CMResDto<?> cmRespDto = new CMResDto(1,"로그아웃되었습니다.",null);
+
                 Script.responseData(response, cmRespDto);
             }
         }
@@ -60,8 +63,6 @@ public class JwtLogoutSuccessHandler implements LogoutSuccessHandler {
 //        SecurityContext context = SecurityContextHolder.getContext();
 //        context.setAuthentication(null);
 //        SecurityContextHolder.clearContext();
-//
-//
 //        CMResDto<?> CMResDto = new CMResDto<>(1, "로그아웃되었습니다.", null);
 //        Script.responseData(response, CMResDto);
     }

@@ -31,6 +31,11 @@ repositories {
 // querydsl에서 사용할 경로 설정
 def querydslDir = "$buildDir/generated/querydsl" // (3)
 
+
+def webappDir = "$projectDir/src/main/frontend"
+
+
+
 // JPA 사용 여부와 사용할 경로를 설정
 querydsl {
     jpa = true
@@ -56,10 +61,6 @@ compileQuerydsl { // (7)
 }
 
 dependencies {
-
-//    // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
-//    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
-
 
     // https://mvnrepository.com/artifact/org.springframework.restdocs/spring-restdocs-mockmvc
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
@@ -116,4 +117,30 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+
+task buildReact(type: Exec) {
+    dependsOn "installReact"
+    workingDir "$webappDir"
+    inputs.dir "$webappDir"
+    group = BasePlugin.BUILD_GROUP
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine "npm.cmd", "run-script", "build"
+    } else {
+        commandLine "npm", "run-script", "build"
+    }
+}
+
+task installReact(type: Exec) {
+    workingDir "$webappDir"
+    inputs.dir "$webappDir"
+    group = BasePlugin.BUILD_GROUP
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine "npm.cmd", "audit", "fix"
+        commandLine 'npm.cmd', 'install'
+    } else {
+        commandLine "npm", "audit", "fix"
+        commandLine 'npm', 'install'
+    }
 }

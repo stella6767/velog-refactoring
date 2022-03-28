@@ -135,7 +135,7 @@ public class UtilManager {
 
     public static String generateRefreshToken(Long userId) {
 
-        return JWTUtils.generateAccessToken(userId);
+        return JWTUtils.generateRefreshToken(userId);
     }
 
 

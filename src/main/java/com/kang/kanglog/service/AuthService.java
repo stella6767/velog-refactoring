@@ -38,8 +38,6 @@ public class AuthService {
     private final ModelMapper modelMapper;
 
 
-
-
     @Transactional
     public String join(JoinDto joinDto) {
 
@@ -63,12 +61,9 @@ public class AuthService {
     }
 
 
-    public LoginRespDto loadUser(User user, HttpServletResponse resp) {
-
-
+    public LoginRespDto loadUser(User user) {
 
         log.info("CSR 유저정보 유지" + user);
-
         LoginRespDto loginRespDto = new LoginRespDto();
         loginRespDto.toDto(user);
 

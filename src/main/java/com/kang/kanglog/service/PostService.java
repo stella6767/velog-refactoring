@@ -103,9 +103,8 @@ public class PostService {
             log.info("내 벨로그 글에 들어왔다고 판단");
         }
 
-        Post postEntity = postRepository.findById(postId) //함수형으로 변환
+        Post postEntity = postRepository.findById(postId)
                 .orElseThrow(()->new IllegalArgumentException("id를 확인해주세요!"));
-
 
         int likeCount = postEntity.getLikes().size();
         postEntity.setLikeCount(likeCount); //view에서 연산을 최소한 하기 위해

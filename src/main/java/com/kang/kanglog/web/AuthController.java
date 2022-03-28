@@ -42,53 +42,12 @@ public class AuthController {
 
     @LoginCheck
     @GetMapping("/auth/loadUser")
-    public CMResDto<?> loadUser(@AuthenticationPrincipal PrincipalDetails principalDetails, HttpServletResponse resp) {
+    public CMResDto<?> loadUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        return new CMResDto(HttpStatus.OK.value(), "CSR 로그인 정보 유지", authService.loadUser(principalDetails.getUser(), resp));
+        return new CMResDto(HttpStatus.OK.value(), "CSR 로그인 정보 유지", authService.loadUser(principalDetails.getUser()));
     }
 
-//
-//    @PostMapping("/login")
-//    public CMResDto<?> login(@RequestBody JoinDto joinDto, HttpServletResponse response) {
-//
-//        log.info("로그인 요청 옴");
-//
-//        User principal = userRepository.findByUsername(joinDto.getUsername());
-//
-//        if (principal != null) {
-//
-//            final String token = jwtService.generateAccessToken(principal.getId());
-//            final String refreshJwt = jwtService.generateRefreshToken(principal.getId());
-//
-//            //cookie로 만듬
-//            Cookie accessToken = utilManager.createCookie(JwtProperties.ACCESS_TOKEN_NAME, token);
-//            Cookie refreshToken = utilManager.createCookie(JwtProperties.REFRESH_TOKEN_NAME, refreshJwt);
-//
-//            //RefreshToken을 Redis에 저장
-//            jwtService.saveTokenInRedis(refreshJwt, principal.getId().toString());
-//
-//            log.info("refreshToken: " + refreshToken); //쿠키
-//
-//            //이제 이 쿠키를 클라이언트 서버로
-//            //response.setHeader("Set-Cookie", "key=value; HttpOnly; SameSite=strict");
-//            response.addCookie(accessToken);
-//            response.addCookie(refreshToken);
-//
-//            return new CMResDto(1, "로그인성공", jwtService.makeLoginRespDto(principal));
-//
-//        } else {
-//            try {
-//                response.sendError(HttpStatus.UNAUTHORIZED.value(), "유저정보를 찾을 수 없습니다.");
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            //return new CMResDto<>(-1,"로그인에러",null);
-//        }
-//
-//        return null;
-//    }
-//
-//
+
 //    //소셜 로그인
 //    @PostMapping("/auth/oauthLogin")
 //    public CMResDto<?> oauthLogin(@RequestBody Map<String, Object> data, HttpServletResponse response) {

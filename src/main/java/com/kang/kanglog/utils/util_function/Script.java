@@ -1,7 +1,7 @@
-package com.kang.kanglog.utils.common;
+package com.kang.kanglog.utils.util_function;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kang.kanglog.utils.dto.CMResDto;
+import com.kang.kanglog.utils.common.CMResDto;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletResponse;
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @Slf4j
-public class Script {
+public class Script  {
 
     public static void responseData(HttpServletResponse resp, CMResDto<?> cmResDto) throws IOException {
         PrintWriter out;

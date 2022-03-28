@@ -1,8 +1,9 @@
 package com.kang.kanglog.config.security;
 
+import com.kang.kanglog.utils.util_function.Script;
+import com.kang.kanglog.utils.common.CMResDto;
 import lombok.extern.slf4j.Slf4j;
-import net.lunalabs.mj.utills.common.CMResDto;
-import net.lunalabs.mj.utills.common.Script;
+
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
@@ -18,9 +19,9 @@ public class CustomFailureHandler implements AuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
 
         log.info("로그인 실패..");
-        CMResDto<?> cmRespDto = new CMResDto(0, "로그인 실패", null);
+        CMResDto<?> CMResDto = new CMResDto(0, "로그인 실패", null);
 
-        Script.responseData(httpServletResponse, cmRespDto);
+        Script.responseData(httpServletResponse, CMResDto);
 
 
     }

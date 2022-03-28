@@ -4,11 +4,13 @@ package com.kang.kanglog.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kang.kanglog.config.security.*;
 import com.kang.kanglog.repository.UserRepository;
-import com.kang.kanglog.utils.jwt.JwtProperties;
+import com.kang.kanglog.service.RedisService;
+import com.kang.kanglog.utils.common.JwtProperties;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -34,6 +36,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Bean
+    public RedisService redisService() {
+        return new RedisService(new StringRedisTemplate());
+    }
+
+
+    @Bean
     public BCryptPasswordEncoder encode() {
         return new BCryptPasswordEncoder();
     }
@@ -42,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         super.configure(web);
-        web.ignoring().mvcMatchers("/**"); //문지기가 사람들을 다 통과시켜줌
+        //web.ignoring().mvcMatchers("/**"); //문지기가 사람들을 다 통과시켜줌
     }
 
 
@@ -59,19 +67,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// STATELESS: session을 사용하지 않겠다는 의미
                 .and()
                 .addFilter(jwtLoginFilter())
-                .addFilter(new JwtVertifyFilter(authenticationManager(), session))
+                .addFilter(new JwtVertifyFilter(authenticationManager(), session, userRepository, redisService()))
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint())
                 .accessDeniedHandler(jwtAccessDeniedHandler()) //권한이 없을 때
                 .and()
                 .authorizeRequests()
                 .antMatchers("/user/**").authenticated() //인증만 되면 ok
-                .antMatchers("/admin/**").access("hasRole('ROLE_SUPER') OR hasRole('ROLE_NOMARL')")
+                .antMatchers("/admin/**").access("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
                 .antMatchers("/{building}/publish").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .logout()
-                .logoutUrl("/logout.do")
+                .logoutUrl("/logout")
                 .logoutSuccessHandler(jwtLogoutSuccessHandler)
         ;
     }
@@ -114,8 +122,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtLoginFilter jwtLoginFilter() throws Exception {
-        final JwtLoginFilter jwtAuthenticationFilter = new JwtLoginFilter(authenticationManager(), om, userRepository);
-        jwtAuthenticationFilter.setFilterProcessesUrl("/api/login.do");
+        final JwtLoginFilter jwtAuthenticationFilter = new JwtLoginFilter(authenticationManager(), om, userRepository, redisService());
+        jwtAuthenticationFilter.setFilterProcessesUrl("/login");
         jwtAuthenticationFilter.setAuthenticationManager(authenticationManager());
         //왜 2번이나 설정해줘야 되는지 모르겠다..
 

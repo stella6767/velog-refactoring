@@ -30,7 +30,7 @@ public class PrincipalDetailsService implements UserDetailsService {
         log.info("나오는 게 정상인디.. "+principal.toString());
 
         if(principal == null) {
-            throw new IllegalArgumentException("id를 찾을 수 없습니다.");
+            throw new IllegalArgumentException("로그인 정보를 찾을 수 없습니다.");
             //return null;
         }else {
 

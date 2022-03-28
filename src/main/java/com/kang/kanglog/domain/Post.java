@@ -1,10 +1,7 @@
 package com.kang.kanglog.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -47,10 +44,11 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
-
+    @Setter
     @Transient  //칼럼이 만들어지지 않는다.
     private int likeCount;
 
+    @Setter
     @Transient
     private boolean likeState;
 

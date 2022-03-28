@@ -1,11 +1,13 @@
 package com.kang.kanglog.config.aop;
 
 
+import com.kang.kanglog.utils.common.CMResDto;
 import lombok.extern.slf4j.Slf4j;
-import net.lunalabs.mj.utills.common.CMResDto;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -20,7 +22,17 @@ import org.springframework.validation.FieldError;
 public class BindingAdvice {
 
 
-    @Around("execution(* net.lunalabs.mj.web..*Controller.*(..))")
+
+    @Before("@annotation(com.kang.kanglog.config.anno.LoginCheck)")
+    public void loginCheck(JoinPoint joinPoint) {
+        //interceptor를 이용할까 하다가, 그냥 pontcut 적용
+
+        Object[] args = joinPoint.getArgs();
+        log.info("로그인 체크 메서드");
+    }
+
+
+    @Around("execution(* com.kang.kanglog.web..*Controller.*(..))")
     public Object validCheck(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Object[] args = proceedingJoinPoint.getArgs();
         String errorMsg = "";

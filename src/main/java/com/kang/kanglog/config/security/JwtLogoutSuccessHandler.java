@@ -1,10 +1,11 @@
 package com.kang.kanglog.config.security;
 
+import com.kang.kanglog.utils.util_function.Script;
+import com.kang.kanglog.utils.common.CMResDto;
+import com.kang.kanglog.utils.common.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.lunalabs.mj.utills.common.CMResDto;
-import net.lunalabs.mj.utills.common.Script;
-import net.lunalabs.mj.utills.jwt.JwtProperties;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,8 +40,8 @@ public class JwtLogoutSuccessHandler implements LogoutSuccessHandler {
         SecurityContextHolder.clearContext();
 
 
-        CMResDto<?> cmRespDto = new CMResDto<>(1, "로그아웃되었습니다.", null);
-        Script.responseData(response, cmRespDto);
+        CMResDto<?> CMResDto = new CMResDto<>(1, "로그아웃되었습니다.", null);
+        Script.responseData(response, CMResDto);
     }
 
 

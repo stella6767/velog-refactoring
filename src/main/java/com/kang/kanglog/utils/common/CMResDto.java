@@ -1,4 +1,4 @@
-package com.kang.kanglog.utils.dto;
+package com.kang.kanglog.utils.common;
 
 
 import lombok.AllArgsConstructor;

@@ -32,6 +32,7 @@ spring:
   cache:
     type: redis
   redis:
+
     host: 127.0.0.1
     port: 6397
 
@@ -79,5 +80,3 @@ decorator:
       enable-logging: true
 
 
-jwt:
-  secret: kimdonggeunkimdonggeunkimdonggeunkimdonggeunkimdonggeunkimdonggeunkimdonggeunkimdonggeun

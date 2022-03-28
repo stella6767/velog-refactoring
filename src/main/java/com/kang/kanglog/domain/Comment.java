@@ -32,4 +32,11 @@ public class Comment extends BaseTimeEntity {
     private User user;
 
 
+    public void add(Post post, User user){
+        this.post = post;
+        this.user = user;
+    }
+
+
+
 }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 60초마다 설정 파일의 변경을 확인 하여 변경시 갱신 -->
+<configuration scan="true" scanPeriod="60 seconds">
+
+    <springProfile name="local">
+        <property name="LOGS_PATH" value="./logs"/>
+    </springProfile>
+
+
+    <!--
+        <springProfile name="dev">
+            <property name="LOGS_PATH" value="/springBoot/yangjaeBack/logs"/>
+        </springProfile>
+
+
+        <springProfile name="prod">
+            <property name="LOGS_PATH" value="/springBoot/yangjaeBack/logs"/>
+        </springProfile>
+    -->
+
+
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %green(%-5level) %logger{35} %cyan(%logger{15}) %green(%M) %n %msg %n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- 에러의 경우 파일에 로그 처리 -->
+    <!--    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOGS_PATH}/logback.log</file>
+            <encoder>
+                <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level%logger{35} %red(%M) - %msg%n</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                &lt;!&ndash; .gz,.zip 등을 넣으면 자동 일자별 로그파일 압축 &ndash;&gt;
+                <fileNamePattern>${LOGS_PATH}/logback.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    &lt;!&ndash; 파일당 최고 용량 &ndash;&gt;
+                    <maxFileSize>5MB</maxFileSize>
+                    &lt;!&ndash; kb, mb, gb &ndash;&gt;
+                </timeBasedFileNamingAndTriggeringPolicy>
+                &lt;!&ndash; 일자별 로그파일 최대 보관주기(~일), 해당 설정일 이상된 파일은 자동으로 제거&ndash;&gt;
+                <maxHistory>30</maxHistory>
+            </rollingPolicy>
+        </appender>-->
+
+
+    <!-- 여기서 파일에 기록할 로그레벨 지정 additivity="false" 중복 제거 -->
+    <!-- <logger name="net.lunalabs.central" level="DEBUG" > <appender-ref ref="DAILY_ROLLING_FILE_APPENDER" /> </logger> -->
+
+    <!-- root레벨 설정 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <!--<appender-ref ref="FILE"/>-->
+    </root>
+
+
+    <logger name="com.kang.kanglog" level="debug" additivity="false">
+        <!-- ref="appender name 지정" -->
+        <!--<appender-ref ref="FILE"/>-->
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+
+
+</configuration>

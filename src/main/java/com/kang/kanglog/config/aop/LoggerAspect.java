@@ -24,7 +24,7 @@ public class LoggerAspect {
     //https://hyunsoori.tistory.com/12
     //https://velog.io/@sixhustle/log  https://prohannah.tistory.com/182
 
-    @Pointcut("execution(* net.lunalabs.mj.web..*Controller.*(..))")
+    @Pointcut("execution(* com.kang.kanglog.web..*Controller.*(..))")
     private void controllerCut(){}
 
 //    @Pointcut("execution(* *.*(..))")
@@ -32,7 +32,11 @@ public class LoggerAspect {
 //    }
 
 
-    @Around("execution(* net.lunalabs.mj.web..*Controller.*(..)) || within(net.lunalabs.mj.service..*)")
+
+
+
+
+    @Around("execution(* com.kang.kanglog.web..*Controller.*(..)) || within(com.kang.kanglog.service..*)")
     public Object requestLoggerAdvice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         String type = proceedingJoinPoint.getSignature().getDeclaringTypeName();
         String method = proceedingJoinPoint.getSignature().getName();
@@ -69,7 +73,7 @@ public class LoggerAspect {
     }
 
 
-    @Around("@annotation(net.lunalabs.mj.config.anno.StopWatch)")
+    @Around("@annotation(com.kang.kanglog.config.anno.StopWatch)")
     public Object stopWatch(ProceedingJoinPoint joinPoint) throws Throwable {
 
         StopWatch stopWatch = new StopWatch();
@@ -88,16 +92,7 @@ public class LoggerAspect {
     }
 
 
-//    private String getValue(Object result) {
-//        String returnValue = null;
-//        if (null != result) {
-//            if (result.toString().endsWith("@" + Integer.toHexString(result.hashCode()))) {
-//                returnValue = ReflectionToStringBuilder.toString(result);
-//            } else {
-//                returnValue = result.toString();
-//            }
-//        }
-//        return returnValue;
-//    }
+
+
 
 }

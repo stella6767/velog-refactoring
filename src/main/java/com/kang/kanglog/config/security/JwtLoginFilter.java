@@ -89,7 +89,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         utilManager.generateLoginCookie(response, principalDetails, redisService);
 
-        Script.responseData(response, new CMResDto(1, "로그인 성공", principalDetails.getUser()));
+        Script.responseData(response, new CMResDto(1, "로그인 성공", principalDetails.getUser()), om);
     }
 
 }

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @Component
 @Aspect ///AOP 설정 클래스
-@Order(value = 1) //AOP 순서
+@Order(value = 2) //AOP 순서
 public class LoggerAspect {
 
     //참고: https://makeinjava.com/logging-aspect-restful-web-service-spring-aop-request-response/

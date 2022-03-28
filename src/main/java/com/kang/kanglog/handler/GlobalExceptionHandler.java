@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -23,7 +25,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value= NoLoginException.class)
-    public ResponseEntity<?> noLoginException(NoLoginException e) {
+    public ResponseEntity<?> noLoginException(NoLoginException e, HttpServletResponse response) {
+
         return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED); //에러를 보낸다.
     }
 

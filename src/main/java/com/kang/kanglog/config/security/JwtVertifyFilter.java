@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -60,9 +61,7 @@ public class JwtVertifyFilter extends BasicAuthenticationFilter { //@Componet가
                 log.info("why.." + userId +" " +accessToken);
             }
 
-            if(userId!=null){
-
-
+            if( userId != null){
                 User userEntity = userRepository.findById(userId).orElseThrow(()->{
                     return new IllegalArgumentException("id를 찾을 수 없습니다.");
                 });
@@ -98,7 +97,7 @@ public class JwtVertifyFilter extends BasicAuthenticationFilter { //@Componet가
         }
 
         try{
-            if(refreshToken != null){
+            if(StringUtils.hasText(refreshToken)){
                 //재발급
                 refreshUserId = redisService.getData(refreshToken);
                 log.info("refreshUserId: " + refreshUserId);

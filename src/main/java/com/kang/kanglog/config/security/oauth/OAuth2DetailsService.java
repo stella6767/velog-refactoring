@@ -18,13 +18,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class OAuth2DetailsService extends DefaultOAuth2UserService { //필요가 없겠는데??
 
     private static final Logger log = LoggerFactory.getLogger(OAuth2DetailsService.class);
     private final UserRepository userRepository;
-
     private final ModelMapper modelMapper;
 
     @Override

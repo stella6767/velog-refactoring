@@ -1,6 +1,8 @@
 package com.kang.kanglog.config.aop;
 
 
+import com.kang.kanglog.config.security.PrincipalDetails;
+import com.kang.kanglog.handler.custom_exception.NoLoginException;
 import com.kang.kanglog.utils.common.CMResDto;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -8,27 +10,54 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import javax.servlet.http.HttpServletResponse;
+
 
 @Slf4j
 @Component
 @Aspect
-@Order(value = 2)
+@Order(value = 1)
 public class BindingAdvice {
-
 
 
     @Before("@annotation(com.kang.kanglog.config.anno.LoginCheck)")
     public void loginCheck(JoinPoint joinPoint) {
         //interceptor를 이용할까 하다가, 그냥 pontcut 적용
 
-        Object[] args = joinPoint.getArgs();
-        log.info("로그인 체크 메서드");
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        log.info("Login Check Method :: " + methodSignature.toString());
+
+        PrincipalDetails details = null;
+        HttpServletResponse response = null;
+
+
+        for (Object arg: joinPoint.getArgs()) {
+            if (arg instanceof PrincipalDetails) {
+                details = (PrincipalDetails) arg;
+                log.info("details :: " +  details);
+
+            }else if (arg instanceof HttpServletResponse){
+                response = (HttpServletResponse) arg;
+            }
+        }
+
+        /**
+         * 바로 response.sendRedirect 는 안 되나보다. 프론트에서 로그아웃처리..
+         */
+
+
+        if (details == null) {
+            log.info("???????????????");
+            throw new NoLoginException();
+        }
+
     }
 
 

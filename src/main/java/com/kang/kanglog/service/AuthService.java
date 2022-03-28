@@ -65,14 +65,7 @@ public class AuthService {
 
     public LoginRespDto loadUser(User user, HttpServletResponse resp) {
 
-        if (user == null) {
 
-            try {
-                resp.sendRedirect("/logout");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
 
         log.info("CSR 유저정보 유지" + user);
 

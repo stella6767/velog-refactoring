@@ -26,7 +26,6 @@ public class PrincipalDetailsService implements UserDetailsService {
 
         log.info("UsernamePasswordAuthenticationFilter => +" + username+"이 DB에 있는지 확인한다.");
         User principal = userRepository.findByUsername(username);
-
         log.info("나오는 게 정상인디.. "+principal.toString());
 
         if(principal == null) {

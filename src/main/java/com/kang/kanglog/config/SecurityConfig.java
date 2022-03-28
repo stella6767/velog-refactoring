@@ -3,6 +3,7 @@ package com.kang.kanglog.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kang.kanglog.config.security.*;
+import com.kang.kanglog.config.security.oauth.OAuth2DetailsService;
 import com.kang.kanglog.repository.UserRepository;
 import com.kang.kanglog.service.RedisService;
 import com.kang.kanglog.utils.common.JwtProperties;
@@ -17,6 +18,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -34,11 +36,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtLogoutSuccessHandler jwtLogoutSuccessHandler;
     private final ObjectMapper om;
 
+    private final RedisService redisService;
 
-    @Bean
-    public RedisService redisService() {
-        return new RedisService(new StringRedisTemplate());
-    }
+
 
 
     @Bean
@@ -61,13 +61,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().configurationSource(corsConfigurationSource())//@CrossOrigin(인증X), 시큐리티 필터에 등록 인증(O)
                 .and()
                 .csrf().disable() //rest api이므로 csrf 보안이 필요없으므로 disable처리.
+                .headers().frameOptions().disable()
+                .and()
                 .formLogin()
                 .disable()
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// STATELESS: session을 사용하지 않겠다는 의미
                 .and()
                 .addFilter(jwtLoginFilter())
-                .addFilter(new JwtVertifyFilter(authenticationManager(), session, userRepository, redisService()))
+                .addFilter(new JwtVertifyFilter(authenticationManager(), session, userRepository, redisService))
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint())
                 .accessDeniedHandler(jwtAccessDeniedHandler()) //권한이 없을 때
@@ -75,12 +77,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/user/**").authenticated() //인증만 되면 ok
                 .antMatchers("/admin/**").access("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
-                .antMatchers("/{building}/publish").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessHandler(jwtLogoutSuccessHandler)
+//                .and()
+//                .oauth2Login()
+//                .userInfoEndpoint()
+//                .userService(oAuth2DetailsService)
+
         ;
     }
 
@@ -122,7 +128,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtLoginFilter jwtLoginFilter() throws Exception {
-        final JwtLoginFilter jwtAuthenticationFilter = new JwtLoginFilter(authenticationManager(), om, userRepository, redisService());
+        final JwtLoginFilter jwtAuthenticationFilter = new JwtLoginFilter(authenticationManager(), om, userRepository, redisService);
         jwtAuthenticationFilter.setFilterProcessesUrl("/login");
         jwtAuthenticationFilter.setAuthenticationManager(authenticationManager());
         //왜 2번이나 설정해줘야 되는지 모르겠다..
@@ -135,7 +141,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    @Bean
+    //@Bean
     public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());

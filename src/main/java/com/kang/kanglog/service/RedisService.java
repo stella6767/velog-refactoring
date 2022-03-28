@@ -1,20 +1,19 @@
 package com.kang.kanglog.service;
 
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 
-//@RequiredArgsConstructor
-//@Service //요거는 자동 빈 주입이 아닌 수동 빈 주입으로..
+@RequiredArgsConstructor
+@Service //요거는 자동 빈 주입이 아닌 수동 빈 주입으로..
 public class RedisService { //refreshToken을 저장하기 위한 용도
 
     private final StringRedisTemplate stringRedisTemplate;
 
-    public RedisService(StringRedisTemplate stringRedisTemplate) {
-        this.stringRedisTemplate = stringRedisTemplate;
-    }
 
 
     public  String getData(String key) {

@@ -3,13 +3,8 @@ package com.kang.kanglog.web;
 
 import com.kang.kanglog.config.anno.LoginCheck;
 import com.kang.kanglog.config.security.PrincipalDetails;
-import com.kang.kanglog.domain.User;
-import com.kang.kanglog.repository.UserRepository;
 import com.kang.kanglog.service.AuthService;
-import com.kang.kanglog.service.JwtService;
 import com.kang.kanglog.utils.common.CMResDto;
-import com.kang.kanglog.utils.common.JwtProperties;
-import com.kang.kanglog.utils.util_function.UtilManager;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.util.Map;
 
 import static com.kang.kanglog.web.dto.user.UserReqDto.*;
 

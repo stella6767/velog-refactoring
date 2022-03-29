@@ -80,7 +80,6 @@ const auth = handleActions(
     //로그인 시도
     [LOGIN_REQUEST]: (state, { payload: data }) =>
       produce(state, (draft) => {
-        draft.cmRespDto = data;
         draft.loginDone = false;
         draft.loginError = null;
         draft.principal = null;

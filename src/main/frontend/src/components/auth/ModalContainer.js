@@ -74,7 +74,7 @@ const AuthModal = memo((props) => {
   };
 
   const onLoginFinish = (values) => {
-    //console.log('login Finish:', values);
+    console.log('login Finish:', values);
 
     const whiteSpace = checkSpace(values.username, values.password);
 

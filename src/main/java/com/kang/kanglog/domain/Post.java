@@ -2,6 +2,7 @@ package com.kang.kanglog.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,10 +21,8 @@ public class Post extends BaseTimeEntity {
     @Column(nullable = false,length = 100)
     private String title;
 
-    @Lob
     private String content;
 
-    @Lob //일단은 이렇게
     private String thumbnail;
 
     @JsonIgnoreProperties({"posts"})
@@ -51,6 +50,16 @@ public class Post extends BaseTimeEntity {
     @Setter
     @Transient
     private boolean likeState;
+
+
+    public void add(User user, List<String> imgList){
+        this.user = user;
+
+        if (imgList.size() > 0) {
+            //썸네일 추출
+            this.thumbnail =imgList.get(0);
+        }
+    }
 
 
 }

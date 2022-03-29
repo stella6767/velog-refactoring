@@ -1,7 +1,11 @@
-package com.kang.kanglog.service;
+package com.kang.kanglog.utils.component;
 
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,10 +13,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.URLDecoder;
+import java.util.Base64;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,6 +30,44 @@ public class S3Uploader {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+
+    private static final String dirName = "static";
+
+
+    public String putS3WithBase64(String base64Str) {
+
+        log.info("이미지 S3 Upload");
+
+        String fileName = dirName + "/" + UUID.randomUUID() + ".jpg";
+
+        try {
+            //byte[] bI = Base64.getDecoder().decode(base64Str);
+            byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((base64Str.substring(base64Str.indexOf(",")+1)).getBytes());
+            InputStream fis = new ByteArrayInputStream(bI);
+
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(bI.length);
+            metadata.setContentType("image/png");
+            metadata.setCacheControl("public, max-age=31536000");
+
+            amazonS3Client.putObject(bucket, fileName, fis, metadata);
+            amazonS3Client.setObjectAcl(bucket, fileName, CannedAccessControlList.PublicRead);
+            //amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
+
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+
+        }
+
+
+        return amazonS3Client.getUrl(bucket, fileName).toString();
+    }
+
+
+
+
 
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)

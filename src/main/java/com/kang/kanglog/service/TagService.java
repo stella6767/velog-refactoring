@@ -3,7 +3,7 @@ package com.kang.kanglog.service;
 
 import com.kang.kanglog.domain.Post;
 import com.kang.kanglog.domain.Tag;
-import com.kang.kanglog.repository.TagRepository;
+import com.kang.kanglog.repository.tag.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,6 @@ import java.util.List;
 public class TagService {
 
     private static final Logger log = LoggerFactory.getLogger(TagService.class);
-
     private final TagRepository tagRepository;
 
     @Transactional(readOnly = true)

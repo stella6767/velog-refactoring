@@ -1,11 +1,10 @@
 package com.kang.kanglog.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kang.kanglog.repository.UserRepository;
+import com.kang.kanglog.repository.user.UserRepository;
 import com.kang.kanglog.service.RedisService;
 import com.kang.kanglog.utils.util_function.Script;
 import com.kang.kanglog.utils.common.CMResDto;
-import com.kang.kanglog.utils.common.JwtProperties;
 import com.kang.kanglog.utils.util_function.UtilManager;
 import com.kang.kanglog.web.dto.user.UserReqDto.LoginDto;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

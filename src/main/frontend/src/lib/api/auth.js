@@ -2,8 +2,11 @@ import { deleteCookie } from '../constants/auth';
 import client from './client';
 
 // 로그인
-export const login = (data) => client.post('/login', JSON.stringify(data));
+export const login = (data) => {
+  //console.log('???');
 
+  return client.post('/login', JSON.stringify(data));
+};
 // 로그아웃
 export const logout = (data) => client.get('/logout');
 

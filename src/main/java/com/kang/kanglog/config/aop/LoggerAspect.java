@@ -52,7 +52,7 @@ public class LoggerAspect {
             log.info("requset url : "  + request.getServletPath());
             log.info("type : " + type);
             log.info("method : " + method);
-            log.info("agrs=>{}",args);
+            //log.info("agrs=>{}",args);
         }
 
 

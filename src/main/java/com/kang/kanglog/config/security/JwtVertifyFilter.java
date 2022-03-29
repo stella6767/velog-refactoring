@@ -1,7 +1,7 @@
 package com.kang.kanglog.config.security;
 
 import com.kang.kanglog.domain.User;
-import com.kang.kanglog.repository.UserRepository;
+import com.kang.kanglog.repository.user.UserRepository;
 import com.kang.kanglog.service.RedisService;
 import com.kang.kanglog.utils.common.JwtProperties;
 import com.kang.kanglog.utils.util_function.UtilManager;

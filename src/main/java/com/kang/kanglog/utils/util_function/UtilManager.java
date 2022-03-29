@@ -2,6 +2,8 @@ package com.kang.kanglog.utils.util_function;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kang.kanglog.config.security.PrincipalDetails;
+import com.kang.kanglog.domain.Post;
+import com.kang.kanglog.domain.Tag;
 import com.kang.kanglog.domain.User;
 import com.kang.kanglog.service.RedisService;
 import com.kang.kanglog.utils.common.CMResDto;
@@ -11,18 +13,27 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.*;
 import java.util.function.Predicate;
 
+@Slf4j
 public class UtilManager {
+
+
 
 
     /**
@@ -45,6 +56,12 @@ public class UtilManager {
      *
      */
 
+    public static List<Tag> parsingToTagObject(String tags, Post postEntity){
+
+        return CMUtills.parsingToTagObject(tags,postEntity);
+    }
+
+
 
     public static Map<String, Object> getHeadersInfo(HttpServletRequest request) {
 
@@ -63,6 +80,16 @@ public class UtilManager {
         Script.responseData(resp, cmResDto);
     }
 
+
+    public static String getImgSrc(String str) {
+
+        return CMUtills.getImgSrc(str);
+    }
+
+    public static List<String> getImgSrcList(String str) {
+
+        return CMUtills.getImgSrcList(str);
+    }
 
 
     /**

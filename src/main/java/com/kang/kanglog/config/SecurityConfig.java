@@ -3,22 +3,19 @@ package com.kang.kanglog.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kang.kanglog.config.security.*;
-import com.kang.kanglog.config.security.oauth.OAuth2DetailsService;
-import com.kang.kanglog.repository.UserRepository;
+import com.kang.kanglog.repository.user.UserRepository;
 import com.kang.kanglog.service.RedisService;
 import com.kang.kanglog.utils.common.JwtProperties;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -35,7 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final HttpSession session;
     private final JwtLogoutSuccessHandler jwtLogoutSuccessHandler;
     private final ObjectMapper om;
-
     private final RedisService redisService;
 
 

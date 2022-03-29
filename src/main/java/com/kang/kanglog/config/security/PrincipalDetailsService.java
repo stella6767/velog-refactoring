@@ -1,9 +1,8 @@
 package com.kang.kanglog.config.security;
 
 import com.kang.kanglog.domain.User;
-import com.kang.kanglog.repository.UserRepository;
+import com.kang.kanglog.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpSession;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +22,9 @@ public class PrincipalDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         log.info("UsernamePasswordAuthenticationFilter => +" + username+"이 DB에 있는지 확인한다.");
-        User principal = userRepository.findByUsername(username);
+
+        User principal = null;
+        //User principal = userRepository.mfindByUsername(username);
         log.info("나오는 게 정상인디.. "+principal.toString());
 
         if(principal == null) {

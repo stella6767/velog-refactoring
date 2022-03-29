@@ -2,8 +2,7 @@ package com.kang.kanglog.config.security.oauth;
 
 import com.kang.kanglog.config.security.PrincipalDetails;
 import com.kang.kanglog.domain.User;
-import com.kang.kanglog.repository.UserRepository;
-import com.kang.kanglog.web.dto.user.Role;
+import com.kang.kanglog.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -52,8 +51,10 @@ public class OAuth2DetailsService extends DefaultOAuth2UserService { //필요가
             oAuth2UserInfo = new GoogleInfo(oAuth2User.getAttributes());
         }
 
+        User userEntity = null;
+
         //2번 최초: 회원가입 + 로그인 최초X : 로그인
-        User userEntity = userRepository.findByUsername(oAuth2UserInfo.getUsername());
+        //User userEntity = userRepository.mfindByUsername(oAuth2UserInfo.getUsername());
 
         UUID uuid = UUID.randomUUID();
         String encPassword = new BCryptPasswordEncoder().encode(uuid.toString());

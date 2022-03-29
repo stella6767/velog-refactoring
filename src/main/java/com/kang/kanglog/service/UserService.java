@@ -4,14 +4,13 @@ import com.kang.kanglog.config.security.PrincipalDetails;
 import com.kang.kanglog.domain.Post;
 import com.kang.kanglog.domain.Tag;
 import com.kang.kanglog.domain.User;
-import com.kang.kanglog.repository.PostRepository;
-import com.kang.kanglog.repository.TagRepository;
-import com.kang.kanglog.repository.UserRepository;
+import com.kang.kanglog.repository.post.PostRepository;
+import com.kang.kanglog.repository.tag.TagRepository;
+import com.kang.kanglog.repository.user.UserRepository;
 import com.kang.kanglog.web.dto.user.UserRespDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,11 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service

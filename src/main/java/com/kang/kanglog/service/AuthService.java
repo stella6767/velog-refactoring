@@ -1,16 +1,9 @@
 package com.kang.kanglog.service;
 
 
-import com.kang.kanglog.config.security.oauth.GoogleInfo;
-import com.kang.kanglog.config.security.oauth.OAuth2UserInfo;
 import com.kang.kanglog.domain.User;
-import com.kang.kanglog.repository.UserRepository;
-import com.kang.kanglog.utils.common.JwtProperties;
-import com.kang.kanglog.utils.util_function.UtilManager;
+import com.kang.kanglog.repository.user.UserRepository;
 import com.kang.kanglog.web.dto.user.Role;
-import com.kang.kanglog.web.dto.user.UserReqDto;
-import com.kang.kanglog.web.dto.user.UserRespDto;
-import com.nimbusds.jose.util.IntegerUtils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -18,12 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Map;
-import java.util.UUID;
 
 import static com.kang.kanglog.web.dto.user.UserReqDto.*;
 import static com.kang.kanglog.web.dto.user.UserRespDto.*;
@@ -42,7 +29,7 @@ public class AuthService {
     public String join(JoinDto joinDto) {
 
         //여기서 trim 검사말고 프론트쪽에서 검사하는 게 나을듯.
-        User userEntity = userRepository.findByUsername(joinDto.getUsername());
+        User userEntity = userRepository.mfindByUsername(joinDto.getUsername());
 
         if(userEntity != null){
             throw new IllegalArgumentException("중복된 유저네임이 있습니다.");

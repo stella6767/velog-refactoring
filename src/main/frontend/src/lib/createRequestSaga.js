@@ -28,8 +28,8 @@ export function createRequestSaga(type, request) {
         payload: response.data,
       });
     } catch (e) {
-      const errorData = e.response.data;
-      console.error('errorData는', errorData);
+      const errorData = e.response;
+      console.error('error는', e);
 
       yield put({
         type: FAILURE,
@@ -82,7 +82,7 @@ export default function createFakeRequestSaga(type, request) {
         payload: generateDummyPost(action.payload),
       });
     } catch (e) {
-      const errorData = e.response.data;
+      const errorData = e.response;
       console.error('errorData는', errorData);
 
       yield put({

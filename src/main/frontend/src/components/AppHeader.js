@@ -69,7 +69,7 @@ const AppHeader = memo((props) => {
     //console.log(loginDone, 'loginError', loginError);
 
     if (loginDone) {
-      alert('로그인 성공'); //매번 랜더링 될 때마다 실행되네.. home애서 실행하도록 해야겠다...
+      //alert('로그인 성공'); //매번 랜더링 될 때마다 실행되네.. home애서 실행하도록 해야겠다...
       setLoginVisible(false);
       //console.log('쿠키는?', document.cookie);
     }

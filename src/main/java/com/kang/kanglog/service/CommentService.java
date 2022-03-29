@@ -4,9 +4,9 @@ package com.kang.kanglog.service;
 import com.kang.kanglog.domain.Comment;
 import com.kang.kanglog.domain.Post;
 import com.kang.kanglog.domain.User;
-import com.kang.kanglog.repository.CommentRepository;
-import com.kang.kanglog.repository.PostRepository;
-import com.kang.kanglog.web.dto.comment.CommentReqDto;
+
+import com.kang.kanglog.repository.comment.CommentRepository;
+import com.kang.kanglog.repository.post.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -46,7 +46,6 @@ public class CommentService {
 
     @Transactional
     public String 댓글쓰기(User principal, CommentAddDto commentAddDto){
-
 
         Post post =
                 postRepository.findById(commentAddDto.getPostId())

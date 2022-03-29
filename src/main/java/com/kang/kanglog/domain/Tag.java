@@ -6,9 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 @ToString(exclude = {"post"})
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
 @Entity
 public class Tag extends BaseTimeEntity {
@@ -22,4 +23,13 @@ public class Tag extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "postId")
     private Post post;
+
+
+    public void add(String temp, Post post){
+
+        this.name = temp;
+        this.post = post;
+
+    }
+
 }

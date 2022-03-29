@@ -71,27 +71,9 @@ spring:
         default_batch_fetch_size: 100
 
 
-mj:
-  imgSavePath: http://mj.lunalabs.net/
-  imgFolderPath: /springBoot/mj/img/
-  mode: tb
-
-
-
 decorator:
   datasource:
     p6spy:
       enable-logging: true
 
 
-cloud:
-  aws:
-    credentials:
-      access-key: AKIARJVQNPZF7RMPRAWZ
-      secret-key: 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
-    region:
-      static: ap-northeast-2
-    s3:
-      bucket: kanglog-bucket
-    stack:
-      auto: false

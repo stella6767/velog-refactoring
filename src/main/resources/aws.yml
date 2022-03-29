@@ -1,0 +1,11 @@
+cloud:
+  aws:
+    credentials:
+      access-key: AKIARJVQNPZF7RMPRAWZ
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: kanglog-bucket
+    stack:
+      auto: false

@@ -110,7 +110,6 @@ public class PostController {
         if(details != null) {
             id = details.getUser().getId();
         }
-
         return new CMResDto<>(1,"게시글 상세보기", postService.한건가져오기(userId, postId, id));
     }
 

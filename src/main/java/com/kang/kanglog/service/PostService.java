@@ -3,9 +3,11 @@ package com.kang.kanglog.service;
 
 import com.kang.kanglog.config.security.PrincipalDetails;
 import com.kang.kanglog.domain.Post;
-import com.kang.kanglog.repository.PostRepository;
-import com.kang.kanglog.repository.TagRepository;
-import com.kang.kanglog.web.dto.post.PostReqDto;
+import com.kang.kanglog.domain.Tag;
+import com.kang.kanglog.repository.post.PostRepository;
+import com.kang.kanglog.repository.tag.TagRepository;
+import com.kang.kanglog.utils.component.S3Uploader;
+import com.kang.kanglog.utils.util_function.UtilManager;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,8 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.util.TagUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.kang.kanglog.web.dto.post.PostReqDto.*;
@@ -32,6 +34,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final TagRepository tagRepository;
     private final ModelMapper modelMapper;
+    private final S3Uploader s3Uploader;
 
 
     @Transactional(readOnly = true) //1.변경감지 안하도록 하고(쓸데없는 연산제거), 2.고립성 유지
@@ -61,37 +64,39 @@ public class PostService {
     public Long 저장하기(PostSaveReqDto postSaveReqDto, PrincipalDetails principalDetails)  {
 
         log.info("저장하기 요청 옴.");
-        String imgSrc = null;
 
-        //썸네일 추출
+        List<String> imgUrlList = new ArrayList<>();
+
+        String imgSrc = "";
+
         Document doc = Jsoup.parseBodyFragment(postSaveReqDto.getContent());
         Elements imgs = doc.getElementsByTag("img");
 
         if(imgs.size() > 0) {
             imgSrc = imgs.get(0).attr("src"); //첫번째 이미지 썸네일
-            //log.info("thunnail 추출: " + src);
+            List<String> imgSrcList = UtilManager.getImgSrcList(postSaveReqDto.getContent());
+            log.info("게시글 이미지 리스트: " + String.valueOf(imgSrcList.size()));
 
-//            BASE64Decoder base64Decoder = new BASE64Decoder();
-//            byte[] decodeSrc = base64Decoder.decodeBuffer(imgSrc);
-//            log.info("decode" + decodeSrc.toString());
+            for (String base64Str : imgSrcList) {
+                String s3Url = s3Uploader.putS3WithBase64(base64Str);
+                imgUrlList.add(s3Url);
+            }
         }
 
-//        Post post = postSaveReqDto.toEntity(imgSrc, principalDetails.getUser());
-//        Post postEntity = postRepository.save(post);
-//
-//        log.info("null pointer? " + postSaveReqDto.getTags());
-//
-//        if(postSaveReqDto.getTags() != null){
-//            List<Tag> tags = TagUtils.parsingToTagObject(postSaveReqDto.getTags(), postEntity);
-//            tagRepository.saveAll(tags);
-//
-//        }
-//
-//        return postEntity.getId();
+        postSaveReqDto.refineContent(doc, imgUrlList, imgs);
+        Post post = modelMapper.map(postSaveReqDto, Post.class);
+        post.add(principalDetails.getUser(), imgUrlList);
 
+        Post postEntity = postRepository.save(post);
 
-        return null;
+        if(postSaveReqDto.getTags() != null){
+            List<Tag> tags =  UtilManager.parsingToTagObject(postSaveReqDto.getTags(), post);
+            tagRepository.saveAll(tags);
+        }
+
+        return postEntity.getId();
     }
+
 
 
     @Transactional(readOnly = true) //JPA 변경감지라는 내부 기능 활성화 X, update시의 정합성을 유지해줌. inset의 유령데이터현상(팬텀현상) 못막음
@@ -102,13 +107,10 @@ public class PostService {
         if(userId == principalId){
             log.info("내 벨로그 글에 들어왔다고 판단");
         }
-
         Post postEntity = postRepository.findById(postId)
                 .orElseThrow(()->new IllegalArgumentException("id를 확인해주세요!"));
-
         int likeCount = postEntity.getLikes().size();
         postEntity.setLikeCount(likeCount); //view에서 연산을 최소한 하기 위해
-
         if(principalId != 0L){
             postEntity.getLikes().forEach((like -> {
                 if(like.getUser().getId() == principalId){
@@ -116,7 +118,6 @@ public class PostService {
                 }
             }));
         }
-
         return postEntity;
     }
 
@@ -152,7 +153,7 @@ public class PostService {
     public Page<Post> 전체찾기(Long principalId, Pageable pageable){
 
         log.info("최신 순으로 찾기");
-        Page<Post> posts = postRepository.findAll(pageable);
+        Page<Post> posts = postRepository.mfindAllByPage(pageable);
 
 
         if(principalId != 0L){

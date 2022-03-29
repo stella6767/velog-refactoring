@@ -7,6 +7,10 @@ server:
       charset: utf-8
       enabled: true
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   profiles:
     active:
       - local
@@ -80,3 +84,14 @@ decorator:
       enable-logging: true
 
 
+cloud:
+  aws:
+    credentials:
+      access-key: AKIARJVQNPZF7RMPRAWZ
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: kanglog-bucket
+    stack:
+      auto: false

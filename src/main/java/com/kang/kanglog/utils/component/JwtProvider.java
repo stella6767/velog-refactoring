@@ -1,9 +1,9 @@
-package com.kang.kanglog.service;
+package com.kang.kanglog.utils.component;
 
 
 import com.kang.kanglog.domain.User;
+import com.kang.kanglog.service.RedisService;
 import com.kang.kanglog.utils.common.JwtProperties;
-import com.kang.kanglog.web.dto.user.UserRespDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -11,19 +11,16 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
-import static com.kang.kanglog.web.dto.user.UserRespDto.*;
-
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class JwtService {
+public class JwtProvider {
 
     private final RedisService redisService;
 

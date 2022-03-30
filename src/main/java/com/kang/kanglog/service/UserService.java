@@ -97,6 +97,10 @@ public class UserService {
     public Page<PostResDto.PostDto> 좋아요게시글목록(Long principalId, Pageable pageable) {
         // 읽기 목록
         Page<Post> likePosts = postRepository.mLikeList(pageable, principalId);
+
+        if (likePosts == null){
+            return null;
+        }
         return likePosts.map(entity -> {
             PostResDto.PostDto dto = new PostResDto.PostDto(principalId, entity);
             return dto;

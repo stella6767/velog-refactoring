@@ -106,8 +106,8 @@ const user = handleActions(
       loadUserPostError: null,
       loadUserPostDone: true,
       cmRespDto: data,
-      likedPosts: state.likedPosts.concat(data.data.content),
-      hasMorePosts: !data.data.last,
+      likedPosts: state?.likedPosts?.concat(data?.data?.content),
+      hasMorePosts: !data?.data?.last,
     }),
     [LOAD_USER_POSTS_FAILURE]: (state, { payload: error }) => ({
       ...state,

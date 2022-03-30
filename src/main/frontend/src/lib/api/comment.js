@@ -1,9 +1,9 @@
 import client from './client';
 
-export const save = ({ content, postId }) => {
-  console.log('content', content, 'postId', postId);
+export const save = (comment) => {
+  console.log('comment', comment);
 
-  return client.post(`/comment/${postId}`, JSON.stringify(content));
+  return client.post(`/comment`, JSON.stringify(comment));
 };
 
 export const deleteById = (id) => {

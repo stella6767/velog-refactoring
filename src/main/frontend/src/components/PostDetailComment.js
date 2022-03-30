@@ -10,12 +10,12 @@ const PostDetailComment = memo((props) => {
   const { post, userId, postId, getPostDone } = props;
 
   const { commentDeleteDone, commentDeleteError } = useSelector(({ comment }) => ({
-    commentDeleteDone: comment.commentDeleteDone,
-    commentDeleteError: comment.commentDeleteError,
+    commentDeleteDone: comment?.commentDeleteDone,
+    commentDeleteError: comment?.commentDeleteError,
   }));
 
-  const [commentLength, setCommentLength] = useState(post.comments.length);
-  const [comments, setComments] = useState(post.comments);
+  const [commentLength, setCommentLength] = useState(post?.comments?.length);
+  const [comments, setComments] = useState(post?.comments);
 
   useUpdateEffect(() => {
     if (getPostDone) {
@@ -38,14 +38,14 @@ const PostDetailComment = memo((props) => {
       <StyledDetailCommentDiv>
         <h3>{commentLength}개의 댓글</h3>
         <CommentForm
-          postId={post.id}
+          postId={post?.id}
           setCommentLength={setCommentLength}
           commentLength={commentLength}
           setComments={setComments}
           comments={comments}
         />
         {comments.map((comment) => (
-          <CommentCard key={comment.id} comment={comment} userId={userId} postId={postId} setComments={setComments} />
+          <CommentCard key={comment?.id} comment={comment} userId={userId} postId={postId} setComments={setComments} />
         ))}
       </StyledDetailCommentDiv>
     </>

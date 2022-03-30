@@ -9,11 +9,11 @@ const LikeList = memo((props) => {
   const [page, setPage] = useState(0);
 
   const { likedPosts, hasMorePosts, loading, loadUserPostDone, loadUserPostError } = useSelector(({ loading, user }) => ({
-    likedPosts: user.likedPosts,
-    hasMorePosts: user.hasMorePosts,
+    likedPosts: user?.likedPosts,
+    hasMorePosts: user?.hasMorePosts,
     loading: loading['LOAD_USER_POSTS_REQUEST'],
-    loadUserPostDone: user.loadUserPostDone,
-    loadUserPostError: user.loadUserPostError,
+    loadUserPostDone: user?.loadUserPostDone,
+    loadUserPostError: user?.loadUserPostError,
   }));
 
   const dispatch = useDispatch();
@@ -56,13 +56,11 @@ const LikeList = memo((props) => {
   return (
     <>
       <AppLayout>
-        {likedPosts.length != 1 && (
-          <StyledMainDiv>
-            {likedPosts.map((post) => (
-              <PostCard key={post.id} post={post} loading={loading} />
-            ))}
-          </StyledMainDiv>
-        )}
+        <StyledMainDiv>
+          {likedPosts?.map((post) => (
+            <PostCard key={post?.id} post={post} loading={loading} />
+          ))}
+        </StyledMainDiv>
       </AppLayout>
     </>
   );

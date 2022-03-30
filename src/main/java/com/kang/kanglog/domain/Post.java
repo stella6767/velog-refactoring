@@ -1,5 +1,6 @@
 package com.kang.kanglog.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.security.core.parameters.P;
@@ -26,21 +27,21 @@ public class Post extends BaseTimeEntity {
 
     private String thumbnail;
 
-    @JsonIgnoreProperties({"posts"})
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="userId")
     private User user;
 
-    @JsonIgnoreProperties({"post"})
+    @JsonIgnore
     @OneToMany(mappedBy = "post",  fetch = FetchType.LAZY) //mappedBy 하면 테이블의 칼럼 안 생김을 명시
     private List<Tag> tags = new ArrayList<>();
 
-    @JsonIgnoreProperties({"post"})
+    @JsonIgnore
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private List<Like> likes = new ArrayList<>(); //A 이미지에 홍길동, 장보고, 임꺽정 좋아요. (고소영)
 
     @OrderBy("id DESC")
-    @JsonIgnoreProperties({"post"})
+    @JsonIgnore
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 

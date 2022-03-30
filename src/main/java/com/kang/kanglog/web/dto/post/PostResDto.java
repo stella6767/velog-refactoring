@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.kang.kanglog.domain.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -18,11 +19,8 @@ import java.util.List;
 public class PostResDto {
 
 
-    @Builder
     @NoArgsConstructor
-    @AllArgsConstructor
     @Data
-    @Transactional(readOnly = true)
     public static class PostDto {
 
         private Long id;
@@ -40,21 +38,22 @@ public class PostResDto {
 
 
         public PostDto(long principalId, Post post) {
-
+            //https://localcoder.org/failed-to-lazily-initialize-a-collection-of-role
             //https://stackoverflow.com/questions/17662634/failed-to-lazily-initialize-a-collection-when-inside-a-transaction
-            log.info("트랜잭션 경계 안일텐데?? " + TransactionSynchronizationManager.isActualTransactionActive());
+            log.info("트랜잭션 경계 안일텐데 2 ?? " + TransactionSynchronizationManager.isActualTransactionActive());
 
+            //왜 likes는 되고 나머지 tomany 연관관계는 안 되는거야..
+            Hibernate.initialize(post.getComments());
+            Hibernate.initialize(post.getTags());
 
             this.id = post.getId();
             this.title = post.getTitle();
             this.content = post.getContent();
             this.thumbnail = post.getThumbnail();
             this.user = post.getUser();
-
-            //log.info("이해가 안 되네? " + post.getTags());
+            //log.info("이해가 안 되네? 여기서 초기화를 해줘야 되는 이유가? " + post.getTags().size());
             this.tags = post.getTags();
             this.likes = post.getLikes();
-
             //log.info("이해가 안 되네? " + post.getComments());
             this.comments = post.getComments();
             this.likeCount = this.likes.size(); //view에서 연산을 최소한 하기 위해
@@ -72,25 +71,9 @@ public class PostResDto {
             }
         }
 
-        @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-        public PostResDto.PostDto PostDtoTest(Post post) {
-
-            //https://stackoverflow.com/questions/17662634/failed-to-lazily-initialize-a-collection-when-inside-a-transaction
-            log.info("트랜잭션 경계 안일텐데33?? " + TransactionSynchronizationManager.isActualTransactionActive());
-
-            /**
-             * 다른 영속성 컨텍스트 세션이라서?
-             * 현재 영속성 컨텍스트의 상태를 확인할 수 있는 메서드가 없나>
-             */
 
 
-            PostResDto.PostDto build= PostResDto.PostDto.builder()
-                    .comments(post.getComments())
-                    .tags(post.getTags())
-                    .build();
 
-            return build;
-        }
 
 
     }

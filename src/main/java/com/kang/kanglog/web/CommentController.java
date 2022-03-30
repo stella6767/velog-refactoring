@@ -36,7 +36,7 @@ public class CommentController {
     @PostMapping("/comment") //todo api 규격변경
     public CMResDto<?> save(@Valid @RequestBody CommentAddDto commentAddDto, @AuthenticationPrincipal PrincipalDetails principalDetails){   // content, imageId, userId(세션)
 
-        return new CMResDto<>(1, commentService.댓글쓰기(principalDetails.getUser(), commentAddDto),null );
+        return new CMResDto<>(1, "댓글 작성",commentService.댓글쓰기(principalDetails.getUser(), commentAddDto) );
     }
 
 }

@@ -45,7 +45,7 @@ public class CommentService {
 
 
     @Transactional
-    public String 댓글쓰기(User principal, CommentAddDto commentAddDto){
+    public Comment 댓글쓰기(User principal, CommentAddDto commentAddDto){
 
         Post post =
                 postRepository.findById(commentAddDto.getPostId())
@@ -54,9 +54,8 @@ public class CommentService {
         //Save 할 때 연관관계가 있으면 오브젝트로 만들어서 id값만 넣어주면 된다. 하지만 나는 오브젝트를
         Comment comment = modelMapper.map(commentAddDto, Comment.class);
         comment.add(post, principal);
-        commentRepository.save(comment);
 
-        return "댓글 작성";
+        return commentRepository.save(comment);
     }
 
 

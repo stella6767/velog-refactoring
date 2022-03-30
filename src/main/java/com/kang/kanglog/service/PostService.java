@@ -2,6 +2,7 @@ package com.kang.kanglog.service;
 
 
 import com.kang.kanglog.config.security.PrincipalDetails;
+import com.kang.kanglog.domain.Comment;
 import com.kang.kanglog.domain.Post;
 import com.kang.kanglog.domain.Tag;
 import com.kang.kanglog.repository.post.PostRepository;
@@ -114,14 +115,12 @@ public class PostService {
                 .orElseThrow(()->new IllegalArgumentException("id를 확인해주세요!"));
 
         log.info("트랜잭션 경계 안 1 " + TransactionSynchronizationManager.isActualTransactionActive());
-
+//        log.info(String.valueOf(postEntity.getTags()));
+//        log.info(String.valueOf(postEntity.getComments()));
 
         PostResDto.PostDto postDto = new PostResDto.PostDto(id, postEntity);
 
-        //PostResDto.PostDto postDto = new PostResDto.PostDto();
-
         return postDto;
-        //return postDto.PostDtoTest(postEntity);
     }
 
 

@@ -1,10 +1,8 @@
 package com.kang.kanglog.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -22,6 +20,7 @@ public class Comment extends BaseTimeEntity {
     @Column(length = 300, nullable = false)
     private String content;
 
+    @JsonIgnore
     @JoinColumn(name = "postId")
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;

@@ -15,10 +15,10 @@ import {
 //이 페이지 인피니트 스크롤링은 나중에 구현하자.
 const User = memo((props) => {
   const { posts, userData, userDone } = useSelector(({ user }) => ({
-    userData: user.userData,
+    userData: user?.userData,
     //userLoading: loading['USER_REQUEST'],
-    userDone: user.userDone,
-    posts: user.posts,
+    userDone: user?.userDone,
+    posts: user?.posts,
   }));
 
   const dispatch = useDispatch();
@@ -39,29 +39,28 @@ const User = memo((props) => {
     <>
       <AppLayout />
       <Global />
-      {userDone && (
-        <StyledUserContainerDiv>
-          <StyledUserVelogDiv>
-            <StyledUserTopDiv>
-              <StyledUserProfileImg />
-              <StyledUserDescDiv>
-                <div className="name">{userData.user.username}</div>
-                <div className="description">개발자 지망생~~ 이 사이트는 velog를 모방하였습니다.</div>
-              </StyledUserDescDiv>
-            </StyledUserTopDiv>
-            <div className="line-height-div" />
-            <div className="social-div"></div>
-          </StyledUserVelogDiv>
 
-          {/* map함수 괄호 잘못 적어서 2시간 삽질했네!!!!!!!!!!!  */}
+      <StyledUserContainerDiv>
+        <StyledUserVelogDiv>
+          <StyledUserTopDiv>
+            <StyledUserProfileImg />
+            <StyledUserDescDiv>
+              <div className="name">{userData?.user?.username}</div>
+              <div className="description">이 사이트는 velog를 모방하였습니다.</div>
+            </StyledUserDescDiv>
+          </StyledUserTopDiv>
+          <div className="line-height-div" />
+          <div className="social-div"></div>
+        </StyledUserVelogDiv>
 
-          <div>
-            {posts.map((post) => (
-              <PostBox key={post.id} post={post} userId={props.match.params.userId} />
-            ))}
-          </div>
-        </StyledUserContainerDiv>
-      )}
+        {/* map함수 괄호 잘못 적어서 2시간 삽질했네!!!!!!!!!!!  */}
+
+        <div>
+          {posts?.map((post) => (
+            <PostBox key={post?.id} post={post} userId={props.match.params.userId} />
+          ))}
+        </div>
+      </StyledUserContainerDiv>
     </>
   );
 });

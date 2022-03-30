@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,17 +32,17 @@ public class Post extends BaseTimeEntity {
     private User user;
 
     @JsonIgnoreProperties({"post"})
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY) //mappedBy 하면 테이블의 칼럼 안 생김을 명시
-    private List<Tag> tags;
+    @OneToMany(mappedBy = "post",  fetch = FetchType.LAZY) //mappedBy 하면 테이블의 칼럼 안 생김을 명시
+    private List<Tag> tags = new ArrayList<>();
 
     @JsonIgnoreProperties({"post"})
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<Like> likes; //A 이미지에 홍길동, 장보고, 임꺽정 좋아요. (고소영)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    private List<Like> likes = new ArrayList<>(); //A 이미지에 홍길동, 장보고, 임꺽정 좋아요. (고소영)
 
     @OrderBy("id DESC")
     @JsonIgnoreProperties({"post"})
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<Comment> comments;
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
 
     @Setter
     @Transient  //칼럼이 만들어지지 않는다.
@@ -51,6 +52,11 @@ public class Post extends BaseTimeEntity {
     @Transient
     private boolean likeState;
 
+
+    public Post(Long id) {
+
+        this.id = id;
+    }
 
     public void add(User user, List<String> imgList){
         this.user = user;

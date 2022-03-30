@@ -21,18 +21,15 @@ public class TagService {
     private final TagRepository tagRepository;
 
     @Transactional(readOnly = true)
-    public List<Post> 관련게시글찾기(String name){
+    public List<Post> 관련게시글찾기(String name) {
 
         List<Tag> tagEntitys = tagRepository.mFindByName(name);
-
         List<Post> tagPosts = new ArrayList<>();
+        tagEntitys.forEach((tag) -> {
+            tagPosts.add(tag.getPost());
+        });
 
-
-       tagEntitys.forEach((tag)->{
-           tagPosts.add(tag.getPost());
-       });
-
-       log.info(String.valueOf(tagPosts.size()));
+        log.info(String.valueOf(tagPosts.size()));
 
         return tagPosts;
     }

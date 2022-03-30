@@ -12,7 +12,6 @@ import java.util.List;
 public class UserRespDto {
 
 
-    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     @Data

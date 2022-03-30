@@ -17,6 +17,12 @@ import java.util.concurrent.Executor;
 @Configuration
 public class AsyncConfig extends AsyncConfigurerSupport {
 
+    /**
+     * 지금은 굳이 쓰지 않더라도.
+     * @return
+     */
+
+
     @Override
     public Executor getAsyncExecutor() {
 

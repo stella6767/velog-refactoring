@@ -8,6 +8,7 @@ import com.kang.kanglog.repository.post.PostRepository;
 import com.kang.kanglog.repository.tag.TagRepository;
 import com.kang.kanglog.utils.component.S3Uploader;
 import com.kang.kanglog.utils.util_function.UtilManager;
+import com.kang.kanglog.web.dto.post.PostResDto;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,7 @@ public class PostService {
     private final TagRepository tagRepository;
     private final ModelMapper modelMapper;
     private final S3Uploader s3Uploader;
+
 
 
     @Transactional(readOnly = true) //1.변경감지 안하도록 하고(쓸데없는 연산제거), 2.고립성 유지
@@ -100,49 +103,38 @@ public class PostService {
 
 
     @Transactional(readOnly = true) //JPA 변경감지라는 내부 기능 활성화 X, update시의 정합성을 유지해줌. inset의 유령데이터현상(팬텀현상) 못막음
-    public Post 한건가져오기(Long userId, Long postId, Long principalId) {
+    public PostResDto.PostDto 한건가져오기(Long userId, Long postId, PrincipalDetails details) {
 
-        log.info("게시글 상세보기 서비스 " );
+        long id = getPrincipalId(details);
 
-        if(userId == principalId){
+        if(userId == id){
             log.info("내 벨로그 글에 들어왔다고 판단");
         }
         Post postEntity = postRepository.findById(postId)
                 .orElseThrow(()->new IllegalArgumentException("id를 확인해주세요!"));
-        int likeCount = postEntity.getLikes().size();
-        postEntity.setLikeCount(likeCount); //view에서 연산을 최소한 하기 위해
-        if(principalId != 0L){
-            postEntity.getLikes().forEach((like -> {
-                if(like.getUser().getId() == principalId){
-                    postEntity.setLikeState(true);
-                }
-            }));
-        }
-        return postEntity;
+
+        log.info("트랜잭션 경계 안 1 " + TransactionSynchronizationManager.isActualTransactionActive());
+
+
+        PostResDto.PostDto postDto = new PostResDto.PostDto(id, postEntity);
+
+        //PostResDto.PostDto postDto = new PostResDto.PostDto();
+
+        return postDto;
+        //return postDto.PostDtoTest(postEntity);
     }
 
 
+    //todo refactoring 대상
     @Transactional(readOnly = true)
-    public Page<Post> 트렌딩게시글(Long principalId, Pageable pageable){
+    public Page<Post> 트렌딩게시글(PrincipalDetails details, Pageable pageable){
 
-        log.info("전체찾기");
+        long id = getPrincipalId(details);
         Page<Post> posts = postRepository.mTrending(pageable);
-
-
-        if(principalId != 0L){
-            //좋아요 하트 색깔 로직
-            posts.forEach((post)->{
-
-                int likeCount = post.getLikes().size();
-                post.setLikeCount(likeCount);
-
-                post.getLikes().forEach((like)->{
-                    if(like.getUser().getId() == principalId) {
-                        post.setLikeState(true);
-                    }
-                });
-            });
-        }
+        Page<PostResDto.PostDto> postDtos = posts.map(entity -> {
+            PostResDto.PostDto dto = new PostResDto.PostDto(id, entity);
+            return dto;
+        });
 
         return posts;
     }
@@ -150,29 +142,35 @@ public class PostService {
 
 
     @Transactional(readOnly = true)
-    public Page<Post> 전체찾기(Long principalId, Pageable pageable){
+    public Page<PostResDto.PostDto> 전체찾기(PrincipalDetails details, Pageable pageable){
 
         log.info("최신 순으로 찾기");
+        long id = getPrincipalId(details);
+
         Page<Post> posts = postRepository.mfindAllByPage(pageable);
+        Page<PostResDto.PostDto> postDtos = posts.map(entity -> {
+            PostResDto.PostDto dto = new PostResDto.PostDto(id, entity);
+            return dto;
+        });
 
-
-        if(principalId != 0L){
-            //좋아요 하트 색깔 로직
-            posts.forEach((post)->{
-
-                int likeCount = post.getLikes().size();
-                post.setLikeCount(likeCount);
-
-                post.getLikes().forEach((like)->{
-                    if(like.getUser().getId() == principalId) {
-                        post.setLikeState(true);
-                    }
-                });
-            });
-        }
-
-        return posts;
+        return postDtos;
     }
+
+
+
+
+    private long getPrincipalId(PrincipalDetails details) {
+        long id = 0L;
+        if(details != null){
+            id = details.getUser().getId();
+        }
+        return id;
+    }
+
+
+
+
+
 
 //    @Transactional
 //    public Post 수정하기(Long id, Post Post) {

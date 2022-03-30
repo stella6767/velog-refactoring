@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @ToString(exclude = {"posts"})
@@ -42,8 +43,12 @@ public class User extends BaseTimeEntity {
 
     @OrderBy("id DESC")
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY) //DTO 만들어서 LazyLoading issue 해결
-    private List<Post> posts;
+    private List<Post> posts = new ArrayList<>();
 
+
+    public User(Long id) {
+        this.id = id;
+    }
 
     public void commonJoin(String password, Role role){ //소셜 로그인 아닐시
         this.password = password;

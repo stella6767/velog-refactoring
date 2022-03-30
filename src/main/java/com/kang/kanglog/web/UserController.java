@@ -51,7 +51,6 @@ public class UserController {
     @DeleteMapping("/user")
     public CMResDto<?> deleteById(@AuthenticationPrincipal PrincipalDetails details){
 
-        log.info("회원 탈퇴 ");
         return new CMResDto<>(userService.회원탈퇴(details.getUser().getId()), "회원 탈퇴", null);
     }
 
@@ -60,10 +59,12 @@ public class UserController {
     @PutMapping("/user/{id}/profileImageUrl")
     public CMResDto<?> profileImageUrlUpdate(@PathVariable Long id, MultipartFile profileImageFile, @AuthenticationPrincipal PrincipalDetails principalDetails, HttpServletRequest request){
 
-        log.info("들어오긴 했나.." + id);
         log.info("파일 받기 : "+profileImageFile.getOriginalFilename());
+
+        //todo 리팩토링 대상
+
         User userEntity = userService.회원사진변경(profileImageFile, principalDetails, request);
-        principalDetails.setUser(userEntity); //세션 값에 저장된 imagProfile도 변경함으로서 세션 이미지를 들고있는 jsp 경로 모두 변경
+        principalDetails.setUser(userEntity); //세션 값에 저장된 imagProfile도 변경함으로서 세션 이미지를 들고있는 경로 모두 변경
 
         return new CMResDto<>(1, "프로필 사진을 변경",  userEntity.getProfileImgUrl());
     }

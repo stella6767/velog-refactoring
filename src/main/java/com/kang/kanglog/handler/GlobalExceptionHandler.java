@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = IllegalArgumentException.class)
     public ResponseEntity<?> illegalArgumentException(Exception e){
 
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED); //에러를 보낸다.
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); //에러를 보낸다.
     }
 
     @ExceptionHandler(value= NoLoginException.class)

@@ -29,8 +29,18 @@ public class TagCustomRepositoryImpl implements TagCustomRepository {
     @Override
     public List<Tag> mFindByName(String name) {
 
-        return null;
+        List<Tag> tags = queryFactory
+                .selectFrom(tag)
+                .join(tag.post, post)
+                .fetchJoin()
+                .where(
+                        tag.name.eq(name)
+                )
+                .fetch();
+        return tags;
     }
+
+
     @Override
     public List<Tag> mFindUserTags(Long userId) {
 

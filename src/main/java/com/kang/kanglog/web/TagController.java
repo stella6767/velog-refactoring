@@ -20,7 +20,6 @@ public class TagController {
 
     @GetMapping("/tag/search")
     public CMResDto<?> searchByTagname(@RequestParam(value = "name") String name){
-
         log.info("tag 관련 게시글 찾기: " + name);
 
         return new CMResDto<>(1,"태그 관련 게시글", tagService.관련게시글찾기(name));

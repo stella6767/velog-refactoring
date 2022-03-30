@@ -7,6 +7,7 @@ import com.kang.kanglog.domain.User;
 import com.kang.kanglog.repository.post.PostRepository;
 import com.kang.kanglog.repository.tag.TagRepository;
 import com.kang.kanglog.repository.user.UserRepository;
+import com.kang.kanglog.web.dto.post.PostResDto;
 import com.kang.kanglog.web.dto.user.UserRespDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -18,25 +19,23 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
-
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final TagRepository tagRepository;
 
 
-//    @Value("${file.path}")  //@Value 안의 ${} 안으로 application.yml 의 value값 바로 땡겨올 수 있음.
-//    private String uploadFolder;
-
-
-
-    @Transactional
+    @Transactional//더티체킹 todo s3로 대체할 지 고민해봐야겠다.
     public User 회원사진변경(MultipartFile profileImageFile, PrincipalDetails principalDetails, HttpServletRequest request) {
 
 //        UUID uuid = UUID.randomUUID(); //같은 이름의 사진이 들어오면 충돌나므로 방지하기 위해
@@ -62,41 +61,31 @@ public class UserService {
 //        //userEntity.setProfileImgUrl(imageUrl);
 //
 //        return userEntity;
+//
 
         return null;
-    }//더티체킹
-
-
+    }
 
 
     @Transactional
     public int 회원탈퇴(Long id) {
-        User userEntity = userRepository.findById(id).orElseThrow(()->{
+        User userEntity = userRepository.findById(id).orElseThrow(() -> {
             return new IllegalArgumentException("id를 찾을 수 없습니다.");
         });
-
-            userRepository.deleteById(id);
-            return 1;
-
+        userRepository.deleteById(id); //여기서 자동으로 에러를 내뱉지 않을까? 위에 로직이 없어도 상관없을 것 같긴 한데
+        return 1;
     }
 
 
     @Transactional(readOnly = true)
     public UserRespDto.UserVelogRespDto 회원블로그(Long userId) {
-        UserRespDto.UserVelogRespDto userVelogRespDto = new UserRespDto.UserVelogRespDto();
 
-        User userEntity = userRepository.findById(userId).orElseThrow(()-> {
+        UserRespDto.UserVelogRespDto userVelogRespDto = new UserRespDto.UserVelogRespDto();
+        User userEntity = userRepository.findById(userId).orElseThrow(() -> {
             return new IllegalArgumentException();
         });
-
-        userVelogRespDto.setPostCount((long) userEntity.getPosts().size());
-
-//        userEntity.getPosts().forEach((post) ->{
-//            post.setLikeCount(post.getLikes().size());
-//        });//굳이 likeCount 집어넣을 필요없이 userEntity의 image의 likes 사이즈 들고오면 되지만, 뷰에서 연산을 최소화하기 위해 set해주는 작업을 거치자.
-
         List<Tag> tagsEntity = tagRepository.mFindUserTags(userId);
-
+        userVelogRespDto.setPostCount((long) userEntity.getPosts().size());
         userVelogRespDto.setTags(tagsEntity);
         userVelogRespDto.setUser(userEntity);
 
@@ -104,26 +93,15 @@ public class UserService {
     }
 
 
-
     @Transactional(readOnly = true)
-    public Page<Post> 좋아요게시글목록(Long principalId, Pageable pageable){
-
-        log.info("전체찾기");
+    public Page<PostResDto.PostDto> 좋아요게시글목록(Long principalId, Pageable pageable) {
+        // 읽기 목록
         Page<Post> likePosts = postRepository.mLikeList(pageable, principalId);
-
-            //좋아요 하트 색깔 로직
-//        likePosts.forEach((post)->{
-//                int likeCount = post.getLikes().size();
-//                post.setLikeCount(likeCount);
-//                        post.setLikeState(true);
-//
-//            });
-
-
-        return likePosts;
+        return likePosts.map(entity -> {
+            PostResDto.PostDto dto = new PostResDto.PostDto(principalId, entity);
+            return dto;
+        });
     }
-
-
 
 
 }

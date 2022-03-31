@@ -96,6 +96,10 @@ export const StyledHeadDescDiv = styled.div`
   display: flex;
   -webkit-box-pack: justify;
   justify-content: space-between;
+
+  button {
+    margin-left: 1rem;
+  }
 `;
 
 export const StyledDetailContentDiv = styled.div`

@@ -35,7 +35,7 @@ public class Like extends BaseTimeEntity {
     @JsonIgnoreProperties({"posts"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
-    private User user;
+    private User user; //단방향
 
 
     public static Like createLike(Post postEntity, User principal) {
@@ -43,6 +43,7 @@ public class Like extends BaseTimeEntity {
         Like like = new Like();
         like.setPost(postEntity);
         like.setUser(principal);
+        postEntity.getLikes().add(like);
 
         return like;
     }

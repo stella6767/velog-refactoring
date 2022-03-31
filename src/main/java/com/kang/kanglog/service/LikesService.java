@@ -4,7 +4,10 @@ import com.kang.kanglog.domain.Like;
 import com.kang.kanglog.domain.Post;
 import com.kang.kanglog.domain.User;
 import com.kang.kanglog.repository.like.LikeRepository;
+import com.kang.kanglog.web.dto.post.PostResDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +34,9 @@ public class LikesService {
 
        return likesRepository.mUnLike(postId, principalId);
     }
+
+
+
 
 
 }

@@ -1,4 +1,5 @@
 import 'antd/dist/antd.css';
+import UpdateForm from 'pages/post/UpdateForm';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
@@ -42,6 +43,7 @@ function App() {
         <Route path="/" exact={true} component={Home} />
         <Route path="/recent" exact={true} component={Recent} />
         <Route path="/write" exact={true} component={writeForm} />
+        {/* <Route path="/update" exact={true} component={UpdateForm} /> */}
         <Route path="/search" exact={true} component={Search} />
         <Route path="/setting" exact={true} component={Profile} />
         <Route path={`/tag`} exact={true} component={TagSearch} />
@@ -49,7 +51,7 @@ function App() {
         <Route path="/:userId" exact={true} component={User} />
         <Route path="/list/liked" exact={true} component={LikeList} />
         <Route path="/:userId/:postId" exact={true} component={PostDetail} />
-        <Route path="/recent" exact={true} component={PostDetail} />
+        <Route path="/:userId/update/:postId" exact={true} component={UpdateForm} />
       </Switch>
     </>
   );

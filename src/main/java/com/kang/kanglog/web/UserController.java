@@ -45,8 +45,6 @@ public class UserController {
         return new CMResDto<>(1, "좋아요 한 게시글 목록", userService.좋아요게시글목록(details.getUser().getId(), pageable));
     }
 
-
-
     @LoginCheck
     @DeleteMapping("/user")
     public CMResDto<?> deleteById(@AuthenticationPrincipal PrincipalDetails details){
@@ -62,7 +60,6 @@ public class UserController {
         log.info("파일 받기 : "+profileImageFile.getOriginalFilename());
 
         //todo 리팩토링 대상
-
         User userEntity = userService.회원사진변경(profileImageFile, principalDetails, request);
         principalDetails.setUser(userEntity); //세션 값에 저장된 imagProfile도 변경함으로서 세션 이미지를 들고있는 경로 모두 변경
 

@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 public interface PostCustomRepository {
 
 
-    Page<Post> mLikeList(Pageable pageable, Long principalId);
 
     Page<Post> mFindByKeyword(String keyword, Pageable pageable);
 

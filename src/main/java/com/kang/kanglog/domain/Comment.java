@@ -32,8 +32,16 @@ public class Comment extends BaseTimeEntity {
 
 
     public void add(Post post, User user){
+
+//        if(this.post != null){
+//            this.post = null; //기존 관계를 제거.
+//            this.post = post; //why?
+//        }
+
+
         this.post = post;
         this.user = user;
+        this.post.getComments().add(this);
     }
 
 

@@ -1,9 +1,10 @@
 package com.kang.kanglog.service;
 
 import com.kang.kanglog.config.security.PrincipalDetails;
-import com.kang.kanglog.domain.Post;
+import com.kang.kanglog.domain.Like;
 import com.kang.kanglog.domain.Tag;
 import com.kang.kanglog.domain.User;
+import com.kang.kanglog.repository.like.LikeRepository;
 import com.kang.kanglog.repository.post.PostRepository;
 import com.kang.kanglog.repository.tag.TagRepository;
 import com.kang.kanglog.repository.user.UserRepository;
@@ -19,19 +20,19 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
+    //의존성이 너무 많아지는 것 같긴 한데.. 그렇다고 인터페이스를 만들기는 싫다.
+
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+
+    private final LikeRepository likeRepository;
     private final TagRepository tagRepository;
 
 
@@ -95,16 +96,32 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Page<PostResDto.PostDto> 좋아요게시글목록(Long principalId, Pageable pageable) {
-        // 읽기 목록
-        Page<Post> likePosts = postRepository.mLikeList(pageable, principalId);
+        // 읽기 목록, N+1 문제를 해결하기 위해.. fetch join을 썼는데, api 명세가 달라지는 걸
 
-        if (likePosts == null){
+
+        Page<Like> posts = likeRepository.mLikeList(pageable, principalId);
+        if (posts == null){
             return null;
         }
-        return likePosts.map(entity -> {
-            PostResDto.PostDto dto = new PostResDto.PostDto(principalId, entity);
-            return dto;
+
+        //동일한 양식으로 프론트에게 돌려줘야겠당.
+        Page<PostResDto.PostDto> likePosts = posts.map(like -> {
+            PostResDto.PostDto postDto = PostResDto.PostDto.builder()
+                    .id(like.getPost().getId())
+                    .title(like.getPost().getTitle())
+                    .content(like.getPost().getContent())
+                    .thumbnail(like.getPost().getThumbnail())
+                    .user(like.getUser())
+                    .comments(like.getPost().getComments()) //이건 불가능..
+                    //.likes(like.getPost().getLikes())
+                    .likeCount(posts.getContent().size())
+                    .likeState(true)
+                    .build();
+
+            return postDto;
         });
+
+        return likePosts;
     }
 
 

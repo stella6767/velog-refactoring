@@ -42,6 +42,19 @@ public class PostService {
     private final S3Uploader s3Uploader;
 
 
+//    @Transactional(readOnly = true)
+//    public Page<PostResDto.PostDto> 좋아요게시글목록(Long principalId, Pageable pageable) {
+//        // 읽기 목록
+//        Page<Post> posts = postRepository.mFindByKeyword(keyword, pageable);
+//        Page<PostResDto.PostDto> postDtos = posts.map(entity -> {
+//            PostResDto.PostDto dto = new PostResDto.PostDto(0L, entity);
+//            return dto;
+//        });
+//
+//        return postDtos;
+//    }
+
+
 
     @Transactional(readOnly = true) //1.변경감지 안하도록 하고(쓸데없는 연산제거), 2.고립성 유지
     public Page<PostResDto.PostDto> 검색하기(String keyword, Pageable pageable){
@@ -172,21 +185,45 @@ public class PostService {
 
 
 
+    @Transactional
+    public Post 수정하기(Long postId, PostSaveReqDto postSaveReqDto) {
+
+        //더티체킹 update치기
+        Post postEntity = postRepository.findById(postId)
+                .orElseThrow(()->new IllegalArgumentException("id를 확인해주세요!!"));// 영속화 (Post 오브젝트) -영속성 컨텍스트 보관
+
+        contentImgAdjust(postSaveReqDto);
+        postEntity.update(postSaveReqDto);
+        //tag 아이디도 필요하겠다.
+//        if(postSaveReqDto.getTags() != null){
+//            List<Tag> tags =  UtilManager.parsingToTagObject(postSaveReqDto.getTags(), post);
+//            //tagRepository.saveAll(tags);
+//        }
+        
+        return postEntity;
+    }//함수 종료=>트랜잭션 종료 => 영속화 되어있는 데이터를 DB로 갱신(flush) => commit ===========>더티체킹
 
 
 
-//    @Transactional
-//    public Post 수정하기(Long id, Post Post) {
-//        //더티체킹 update치기
-//        Post postEntity = postRepository.findById(id)
-//                .orElseThrow(()->new IllegalArgumentException("id를 확인해주세요!!"));// 영속화 (Post 오브젝트) -영속성 컨텍스트 보관
-//
-//        postEntity.setTitle(Post.getTitle());
-//        postEntity.setAuthor(Post.getAuthor());
-//
-//        return PostEntity;
-//    }//함수 종료=>트랜잭션 종료 => 영속화 되어있는 데이터를 DB로 갱신(flush) => commit ===========>더티체킹
 
+    private void contentImgAdjust(PostSaveReqDto postSaveReqDto) {
+        List<String> imgUrlList = new ArrayList<>();
+        String imgSrc = "";
+        Document doc = Jsoup.parseBodyFragment(postSaveReqDto.getContent());
+        Elements imgs = doc.getElementsByTag("img");
+
+        if(imgs.size() > 0) {
+            imgSrc = imgs.get(0).attr("src"); //첫번째 이미지 썸네일
+            List<String> imgSrcList = UtilManager.getImgSrcList(postSaveReqDto.getContent());
+            log.info("게시글 이미지 리스트: " + String.valueOf(imgSrcList.size()));
+
+            for (String base64Str : imgSrcList) {
+                String s3Url = s3Uploader.putS3WithBase64(base64Str);
+                imgUrlList.add(s3Url);
+            }
+        }
+        postSaveReqDto.refineContent(doc, imgUrlList, imgs);
+    }
 
 
 }

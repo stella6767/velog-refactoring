@@ -4,6 +4,7 @@ package com.kang.kanglog.repository.post;
 import com.kang.kanglog.domain.Post;
 import com.kang.kanglog.domain.QLike;
 import com.kang.kanglog.domain.QPost;
+import com.kang.kanglog.domain.QUser;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static com.kang.kanglog.domain.QLike.*;
 import static com.kang.kanglog.domain.QPost.*;
+import static com.kang.kanglog.domain.QUser.*;
 
 
 /**
@@ -38,11 +40,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         this.em = em;
     }
 
-    @Override
-    public Page<Post> mLikeList(Pageable pageable, Long principalId) {
 
-        return null;
-    }
 
     @Override
     public Page<Post> mFindByKeyword(String keyword, Pageable pageable) {

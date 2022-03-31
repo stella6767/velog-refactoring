@@ -9,22 +9,22 @@ const CommentCard = memo((props) => {
   const { comment, userId } = props;
 
   const { principal } = useSelector(({ auth }) => ({
-    principal: auth.principal,
+    principal: auth?.principal,
   }));
 
   const dispatch = useDispatch();
 
   const onDeleteClick = () => {
-    console.log('댓글 삭제', comment.id);
+    console.log('댓글 삭제', comment?.id);
 
-    dispatch(commentDeleteAction(comment.id));
+    dispatch(commentDeleteAction(comment?.id));
   };
 
   return (
     <>
       <Comment
         actions={
-          principal != null && principal.id === comment.user.id
+          principal != null && principal?.id === comment?.user?.id
             ? [
                 <span key="comment-nested-reply-to" onClick={onDeleteClick}>
                   삭제
@@ -32,11 +32,11 @@ const CommentCard = memo((props) => {
               ]
             : null
         }
-        author={<Link to={`/${userId}`}>{comment.user.username}</Link>}
-        content={<p dangerouslySetInnerHTML={{ __html: comment.content }} />}
+        author={<Link to={`/${userId}`}>{comment?.user?.username}</Link>}
+        content={<p dangerouslySetInnerHTML={{ __html: comment?.content }} />}
         style={{ paddingBottom: '3rem' }}
         datetime={
-          <Tooltip title={moment(comment.createDate).format('YYYY-MM-DD HH:mm:ss')}>
+          <Tooltip title={moment(comment?.createDate).format('YYYY-MM-DD HH:mm:ss')}>
             <span>{moment().fromNow()}</span>
           </Tooltip>
         }

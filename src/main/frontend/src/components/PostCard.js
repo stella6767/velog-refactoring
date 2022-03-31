@@ -16,7 +16,11 @@ const PostCard = (props) => {
     <>
       <Global />
       <Link to={`/${post?.user.id}/${post?.id}`}>
-        <Card cover={post?.thumbnail != null ? <img alt="example" src={post?.thumbnail} /> : null} loading={loading}>
+        <Card
+          cover={post?.thumbnail != null ? <img alt="example" src={post?.thumbnail} /> : null}
+          loading={loading}
+          // onError={() => (this.img.src = 'img/default.img')}
+        >
           {/* <Card cover={<img alt="" src={`${post.thumnail}`} />}> */}
           {/* <Link to={`/${post?.user.id}/${post?.id}`}> */}
           <Card.Meta title={post?.title} description={<div dangerouslySetInnerHTML={{ __html: post?.content }} />} />
@@ -24,7 +28,7 @@ const PostCard = (props) => {
           <StyledPostCardDateDiv>
             <span>{moment(post?.createDate).format('YYYY년 MM월 DD일')}</span>
             <span className="separator">·</span>
-            <span>{post?.comments.length}개의 댓글</span>
+            <span>{post?.comments?.length}개의 댓글</span>
           </StyledPostCardDateDiv>
           <StyledPostCardFootDiv>
             <Link to={`/${post?.user.id}`} className="userinfo" href="/@eungyeole">

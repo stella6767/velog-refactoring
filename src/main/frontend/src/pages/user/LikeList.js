@@ -56,11 +56,13 @@ const LikeList = memo((props) => {
   return (
     <>
       <AppLayout>
-        <StyledMainDiv>
-          {likedPosts?.map((post) => (
-            <PostCard key={post?.id} post={post} loading={loading} />
-          ))}
-        </StyledMainDiv>
+        {likedPosts.length > 1 && (
+          <StyledMainDiv>
+            {likedPosts?.map((post) => (
+              <PostCard key={post?.id} post={post} loading={loading} />
+            ))}
+          </StyledMainDiv>
+        )}
       </AppLayout>
     </>
   );

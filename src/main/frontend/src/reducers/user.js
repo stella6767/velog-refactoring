@@ -67,9 +67,9 @@ const user = handleActions(
       userError: null,
       userDone: true,
       cmRespDto: data,
-      userData: data.data,
-      userTags: data.data.tags,
-      posts: data.data.user.posts,
+      userData: data?.data,
+      userTags: data?.data?.tags,
+      posts: data?.data?.user?.posts,
     }),
     [USER_FAILURE]: (state, { payload: error }) => ({
       ...state,
@@ -101,14 +101,18 @@ const user = handleActions(
         draft.loadUserPostDone = false;
         draft.loadUserPostError = null;
       }),
-    [LOAD_USER_POSTS_SUCCESS]: (state, { payload: data }) => ({
-      ...state,
-      loadUserPostError: null,
-      loadUserPostDone: true,
-      cmRespDto: data,
-      likedPosts: state?.likedPosts?.concat(data?.data?.content),
-      hasMorePosts: !data?.data?.last,
-    }),
+    [LOAD_USER_POSTS_SUCCESS]: (state, { payload: data }) => {
+      console.log('data ', data);
+
+      return {
+        ...state,
+        loadUserPostError: null,
+        loadUserPostDone: true,
+        cmRespDto: data,
+        likedPosts: state?.likedPosts?.concat(data?.data?.content),
+        hasMorePosts: !data?.data?.last,
+      };
+    },
     [LOAD_USER_POSTS_FAILURE]: (state, { payload: error }) => ({
       ...state,
       loadUserPostError: error,

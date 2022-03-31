@@ -94,11 +94,41 @@ const PostDetailHeader = memo((props) => {
     dispatch(likeDeleteAction(postId));
   }, [dispatch, postId]);
 
-  const onDeletePost = useCallback(() => {
-    console.log('게시글 삭제 클릭됨', postId);
+  const useConfirm = (message = null, onConfirm, onCancel) => {
+    if (!onConfirm || typeof onConfirm !== 'function') {
+      return;
+    }
+    if (onCancel && typeof onCancel !== 'function') {
+      return;
+    }
 
+    const confirmAction = () => {
+      if (window.confirm(message)) {
+        onConfirm();
+      } else {
+        onCancel();
+      }
+    };
+
+    return confirmAction;
+  };
+  const deleteConfirm = useCallback(() => {
+    console.log('게시글 삭제 클릭됨', postId);
     dispatch(postDeleteAction(postId));
   }, [dispatch, postId]);
+
+  const cancelConfirm = () => console.log('취소했습니다.');
+  const confirmDelete = useConfirm('정말 삭제하시겠습니까?', deleteConfirm, cancelConfirm);
+
+  const updatePost = () => {
+    console.log('props', props);
+    console.log('principal', principal, 'post', postId);
+
+    history.push(`update/${postId}`); //왜 더해지는 거지?
+    //history.replace(`update?userId=${userId}&postId=${postId}`);
+
+    //dispatch(getPostAction(userId, postId));
+  };
 
   return (
     <>
@@ -117,9 +147,14 @@ const PostDetailHeader = memo((props) => {
           </div>
 
           {principal != null && userId == principal.id ? (
-            <Button type="primary" shape="round" danger onClick={onDeletePost}>
-              삭제
-            </Button>
+            <div className="btn-box">
+              <Button type="dashed" shape="round" onClick={confirmDelete}>
+                삭제
+              </Button>
+              <Button type="dashed" shape="round" onClick={updatePost}>
+                수정
+              </Button>
+            </div>
           ) : null}
 
           <div>
@@ -137,7 +172,7 @@ const PostDetailHeader = memo((props) => {
           </div>
         </StyledHeadDescDiv>
         <StyledPostDetailTagDiv>
-          {post?.tags?.map((tag) => (
+          {post.tags.map((tag) => (
             <StyledDetailTagLink key={tag?.id} to={`/tag?name=${tag?.name}`}>
               {tag?.name}
             </StyledDetailTagLink>

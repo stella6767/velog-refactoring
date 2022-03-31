@@ -19,7 +19,9 @@ import java.util.List;
 public class PostResDto {
 
 
+    @Builder //원래는 안 쓰려 했는데..
     @NoArgsConstructor
+    @AllArgsConstructor
     @Data
     public static class PostDto {
 

@@ -1,12 +1,20 @@
 package com.kang.kanglog.repository.like;
 
+import com.kang.kanglog.domain.Like;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
+import java.util.List;
+
 import static com.kang.kanglog.domain.QLike.like;
+import static com.kang.kanglog.domain.QPost.*;
+import static com.kang.kanglog.domain.QUser.*;
 
 @Slf4j
 @Repository
@@ -19,6 +27,36 @@ public class LikeCustomRepositoryImpl implements LikeCustomRepository {
     public LikeCustomRepositoryImpl(JPAQueryFactory queryFactory, EntityManager em) {
         this.queryFactory = queryFactory;
         this.em = em;
+    }
+
+
+    @Override
+    public Page<Like> mLikeList(Pageable pageable, Long principalId) {
+
+
+        List<Like> content = queryFactory
+                .selectFrom(like)
+                .join(like.post, post)
+                .fetchJoin()
+                .join(like.user, user)
+                .fetchJoin()
+                .where(
+                        like.user.id.eq(principalId)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(like.createDate.desc())
+                .fetch();
+
+
+        List<Like> countQuery = queryFactory
+                .selectFrom(like)
+                .where(
+                        like.user.id.eq(principalId)
+                )
+                .fetch();
+
+        return new PageImpl<>(content, pageable, countQuery.size());
     }
 
 

@@ -2,6 +2,7 @@ package com.kang.kanglog.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.kang.kanglog.web.dto.post.PostReqDto;
 import lombok.*;
 import org.springframework.security.core.parameters.P;
 
@@ -68,6 +69,13 @@ public class Post extends BaseTimeEntity {
             this.thumbnail =imgList.get(0);
         }
     }
+
+    public void update(PostReqDto.PostSaveReqDto dto){
+        this.title = dto.getTitle();
+        this.content = dto.getContent();
+        //this.tags = dto.getTags();
+    }
+
 
 
 }

@@ -1,9 +1,14 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useSelector } from 'react-redux';
 
 const TextEditor = (props) => {
   const { value, onChange } = props;
+
+  const { post } = useSelector(({ post }) => ({
+    post: post?.post,
+  }));
 
   // function imageHandler() {
   //   // input file tag 생성
@@ -33,6 +38,13 @@ const TextEditor = (props) => {
   //     // });
   //   };
   // }
+
+  useEffect(() => {
+    //미치겄네, 왜 못 받지??
+    console.log('??? value', value);
+
+    onChange(post?.content);
+  }, []);
 
   const modules = useMemo(
     () => ({
@@ -72,9 +84,9 @@ const TextEditor = (props) => {
   ];
 
   return (
-    <div style={{ height: '500px' }}>
+    <div style={{ height: '63rem' }}>
       <ReactQuill
-        style={{ height: '450px' }}
+        style={{ height: '60rem' }}
         theme="snow"
         modules={modules}
         formats={formats}

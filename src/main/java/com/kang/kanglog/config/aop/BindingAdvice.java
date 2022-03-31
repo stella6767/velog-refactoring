@@ -29,7 +29,7 @@ public class BindingAdvice {
 
     @Before("@annotation(com.kang.kanglog.config.anno.LoginCheck)")
     public void loginCheck(JoinPoint joinPoint) {
-        //interceptor를 이용할까 하다가, 그냥 pontcut 적용
+        //사실 시큐리티에서 다 처리 로직을 짯긴 한데.. 컨트롤러 메서드 단위 별로 또 걸고 싶기도 해서.
 
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         log.info("Login Check Method :: " + methodSignature.toString());

@@ -8,6 +8,11 @@ import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 
+
+/**
+ * 검색타입 만들려고 했는데 귀찮아서 생략.. 뭐 일단 시간나면 추가하는 셈치고 만든 건 냅두자.
+ */
+
 //@NoArgsConstructor
 @Getter
 public class SearchCondition {

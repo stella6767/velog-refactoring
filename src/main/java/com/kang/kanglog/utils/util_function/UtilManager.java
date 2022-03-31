@@ -23,6 +23,8 @@ import java.util.function.Predicate;
 public class UtilManager {
 
 
+    //public static long principalId = 0L; //이거는 동시성 문제 땜에 못 쓰겠네.
+
     /**
      *
      */

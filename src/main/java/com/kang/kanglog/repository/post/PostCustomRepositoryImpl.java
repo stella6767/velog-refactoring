@@ -75,54 +75,26 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         return new PageImpl<>(content, pageable, countQuery.size());
     }
 
-    @Override
-    public Page<Post> mTrending(Pageable pageable) {
-
-        //select * from Post where id in
-        // (select postId
-        // from
-        // (select postId, count(postId) likeCount from Likes group by postId order by 2 desc)
-        // t)
 
 
-        List<Post> posts = queryFactory
-                .selectFrom(post)
-                .join(post.likes, like)
-                .orderBy(like.post.id.count().desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
 
-
-        for (Post post : posts) {
-
-            log.info("post=> " + post);
-
-        }
-
-
-//        queryFactory
-//                .selectFrom(post)
-//                .where(
-//                        post.id.in(
-//                                JPAExpressions
-//                                        .select(
-//
-//
-//                                        )
-//                                        .from(post)
-//                                        .where(post.user.id.eq(userId))
-//                        )
-//
-//                )
-
-
-        return null;
-    }
     @Override
     public Page<Post> mfindAllByPage(Pageable pageable) {
 
-        return null;
+        List<Post> content = queryFactory
+                .selectFrom(post)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(post.createDate.desc())
+                .fetch();
+
+
+        List<Post> countQuery = queryFactory
+                .selectFrom(post)
+                .orderBy(post.createDate.desc())
+                .fetch();
+
+        return new PageImpl<>(content, pageable, countQuery.size());
     }
 
 

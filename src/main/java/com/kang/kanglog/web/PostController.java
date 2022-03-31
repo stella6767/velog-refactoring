@@ -40,7 +40,7 @@ public class PostController {
     // 주소: /post/all?page=0   자동으로 이렇게 먹음
     @GetMapping("/post/all")
     public CMResDto<?> findAllByRecent(@AuthenticationPrincipal PrincipalDetails details,
-                                       @PageableDefault(sort = "id",direction = Sort.Direction.DESC, size = 10) Pageable pageable ){
+                                       @PageableDefault(sort = "id",direction = Sort.Direction.DESC, size = 16) Pageable pageable ){
         log.info("최신게시글 페이지.");
         return new CMResDto<>(1, "게시글리스트 불러오기", postService.전체찾기(details, pageable));
     }
@@ -48,7 +48,7 @@ public class PostController {
 
 
     @GetMapping("/post/trend")  //프론트단에서는 "/" 로 맵핑.
-    public CMResDto<?> findAllByLike(@AuthenticationPrincipal PrincipalDetails details, @PageableDefault(size = 10) Pageable pageable){
+    public CMResDto<?> findAllByLike(@AuthenticationPrincipal PrincipalDetails details, @PageableDefault(size = 16) Pageable pageable){
         log.info("메인 페이지(트렌딩 페이지)");
         return new CMResDto<>(1, "게시글리스트 불러오기", postService.트렌딩게시글(details, pageable));
     }

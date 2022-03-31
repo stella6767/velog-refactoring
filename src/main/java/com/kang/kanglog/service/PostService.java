@@ -2,7 +2,6 @@ package com.kang.kanglog.service;
 
 
 import com.kang.kanglog.config.security.PrincipalDetails;
-import com.kang.kanglog.domain.Comment;
 import com.kang.kanglog.domain.Post;
 import com.kang.kanglog.domain.Tag;
 import com.kang.kanglog.repository.post.PostRepository;
@@ -18,13 +17,16 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.kang.kanglog.web.dto.post.PostReqDto.*;
 
@@ -42,8 +44,14 @@ public class PostService {
 
 
     @Transactional(readOnly = true) //1.변경감지 안하도록 하고(쓸데없는 연산제거), 2.고립성 유지
-    public Page<Post> 검색하기(String keyword, Pageable pageable){
-        return postRepository.mFindByKeyword(keyword,pageable);
+    public Page<PostResDto.PostDto> 검색하기(String keyword, Pageable pageable){
+        Page<Post> posts = postRepository.mFindByKeyword(keyword, pageable);
+        Page<PostResDto.PostDto> postDtos = posts.map(entity -> {
+            PostResDto.PostDto dto = new PostResDto.PostDto(0L, entity);
+            return dto;
+        });
+
+        return postDtos;
     }
 
     @Transactional
@@ -112,9 +120,6 @@ public class PostService {
                 .orElseThrow(()->new IllegalArgumentException("id를 확인해주세요!"));
 
         log.info("트랜잭션 경계 안 1 " + TransactionSynchronizationManager.isActualTransactionActive());
-//        log.info(String.valueOf(postEntity.getTags()));
-//        log.info(String.valueOf(postEntity.getComments()));
-
         PostResDto.PostDto postDto = new PostResDto.PostDto(id, postEntity);
 
         return postDto;
@@ -123,16 +128,18 @@ public class PostService {
 
     //todo refactoring 대상
     @Transactional(readOnly = true)
-    public Page<Post> 트렌딩게시글(PrincipalDetails details, Pageable pageable){
+    public Page<PostResDto.PostDto> 트렌딩게시글(PrincipalDetails details, Pageable pageable){
 
         long id = getPrincipalId(details);
-        Page<Post> posts = postRepository.mTrending(pageable);
-        Page<PostResDto.PostDto> postDtos = posts.map(entity -> {
+        Page<Post> posts = postRepository.mfindAllByPage(pageable);
+
+        List<PostResDto.PostDto> collect = posts.map(entity -> {
             PostResDto.PostDto dto = new PostResDto.PostDto(id, entity);
             return dto;
-        });
+        }).stream().sorted(Comparator.comparing(PostResDto.PostDto::getLikeCount).reversed()).collect(Collectors.toList());
 
-        return posts;
+        Page<PostResDto.PostDto> postDtos = new PageImpl<>(collect);
+        return postDtos;
     }
 
 

@@ -23,6 +23,7 @@ const Search = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log('page init', page);
     setPage(0);
   }, []);
 
@@ -33,7 +34,8 @@ const Search = (props) => {
       if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
         if (hasMorePosts && !loading && loadSearchPostsDone) {
           //console.log('요청함', loadPostLoading);
-          //console.log('이게 될까?', page);
+          // setPage(page + 1);
+          // console.log('비동기 타이밍 때문에 안 되네', page);
           dispatch(loadSearchPostsAction({ page, keyword }));
         }
       }
@@ -46,6 +48,7 @@ const Search = (props) => {
 
   useEffect(() => {
     if (loadSearchPostsDone) {
+      console.log('page?', page);
       setPage(page + 1);
     }
   }, [loadSearchPostsDone]);
@@ -53,6 +56,7 @@ const Search = (props) => {
   const onClick = (keyword) => {
     console.log('enter 누름', keyword);
     dispatch(loadPostsInitAction());
+
     dispatch(loadSearchPostsAction({ page, keyword }));
   };
 
@@ -60,7 +64,12 @@ const Search = (props) => {
     //e.preventDefault();
     //console.log('e', e);
     if (e.key == 'Enter') {
-      onClick(keyword);
+      setPage(0);
+
+      if (page === 0) {
+        //타이밍을 기다려야 되는구만..
+        onClick(keyword);
+      }
     }
   };
 

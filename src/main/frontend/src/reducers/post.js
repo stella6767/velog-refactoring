@@ -88,7 +88,7 @@ const initialState = {
   hasMorePosts: true,
   cmRespDto: null,
   error: null,
-  trendPosts: [],
+  trendPosts: [], //굳이 배열을 3개 만들 필요는 없겠지만. 일단은
   recentPosts: [],
   searchPosts: [],
 };
@@ -109,18 +109,30 @@ const post = handleActions(
         draft.loadTrendPostsDone = false;
         draft.loadTrendPostsError = null;
       }),
-    [LOAD_TREND_POSTS_SUCCESS]: (state, { payload: data }) => ({
-      ...state,
-      loadTrendPostsError: null,
-      loadTrendPostsDone: true,
-      trendPosts: state.trendPosts.concat(data.data.content),
-      cmRespDto: data,
-      hasMorePosts: !data.data.last,
-    }),
-    [LOAD_TREND_POSTS_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      loadTrendPostssError: error,
-    }),
+    [LOAD_TREND_POSTS_SUCCESS]: (state, { payload: data }) => {
+      console.log(data?.data?.content);
+      console.log(state.trendPosts === data?.data?.content);
+
+      let isSame = state.trendPosts === data?.data?.content;
+
+      if (!isSame) {
+        return {
+          ...state,
+          loadTrendPostsError: null,
+          loadTrendPostsDone: true,
+
+          trendPosts: state.trendPosts.concat(data?.data?.content),
+          cmRespDto: data,
+          hasMorePosts: !data?.data?.last,
+        };
+      }
+    },
+    [LOAD_TREND_POSTS_FAILURE]: (state, { payload: error }) => {
+      return {
+        ...state,
+        loadTrendPostssError: error,
+      };
+    },
 
     //최신 게시글 순 불러오기
     [LOAD_RECENT_POSTS_REQUEST]: (state, { payload: data }) =>
@@ -133,7 +145,7 @@ const post = handleActions(
       ...state,
       loadRecentPostsError: null,
       loadRecentPostsDone: true,
-      recentPosts: state.recentPosts.concat(data.data.content),
+      recentPosts: state.recentPosts.concat(data?.data?.content),
       cmRespDto: data,
       hasMorePosts: !data.data.last,
     }),
@@ -153,9 +165,9 @@ const post = handleActions(
       ...state,
       loadSearchPostsError: null,
       loadSearchPostsDone: true,
-      searchPosts: state.searchPosts.concat(data.data.content),
+      searchPosts: state.searchPosts.concat(data?.data?.content),
       cmRespDto: data,
-      hasMorePosts: !data.data.last,
+      hasMorePosts: !data?.data?.last,
     }),
     [LOAD_SEARCH_POSTS_FAILURE]: (state, { payload: error }) => ({
       ...state,

@@ -11,7 +11,5 @@ public interface PostCustomRepository {
 
     Page<Post> mFindByKeyword(String keyword, Pageable pageable);
 
-    Page<Post> mTrending(Pageable pageable);
-
     Page<Post> mfindAllByPage(Pageable pageable);
 }

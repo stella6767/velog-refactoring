@@ -49,13 +49,14 @@ const AppHeader = memo((props) => {
 
   const { isHome } = props;
 
-  const { loginDone, loginError, joinDone, joinError, data, principal } = useSelector(({ auth }) => ({
+  const { loginDone, loginError, joinDone, joinError, data, principal, loadSearchPostsDone } = useSelector(({ auth, post }) => ({
     loginDone: auth.loginDone,
     loginError: auth.loginError,
     data: auth.cmRespDto,
     joinDone: auth.joinDone,
     joinError: auth.joinError,
     principal: auth.principal,
+    loadSearchPostsDone: post.loadSearchPostsDone,
     //loading: loading['LOGOUT_REQUEST'], //그때 그때 순간순간적으로 키 값이 바뀌는데 맞춰서 loading 값을 가져오면 된다.
   }));
 
@@ -88,6 +89,12 @@ const AppHeader = memo((props) => {
 
   const logout = () => {
     dispatch(logoutAction());
+  };
+
+  const refresh = () => {
+    if (loadSearchPostsDone) {
+      location.reload();
+    }
   };
 
   const menu = (principalId) => {
@@ -125,7 +132,7 @@ const AppHeader = memo((props) => {
 
           <LoginBox>
             <Link to="/search">
-              <img src="/images/search.svg" alt="search" />
+              <img src="/images/search.svg" alt="search" onClick={refresh} />
             </Link>
 
             {loginDone === false && principal == null ? (

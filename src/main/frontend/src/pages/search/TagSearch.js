@@ -13,8 +13,8 @@ const TagSearch = memo(() => {
   let location = useLocation();
 
   const { data, tagSearchError } = useSelector(({ tag }) => ({
-    data: tag.data,
-    tagSearchError: tag.tagSearchError,
+    data: tag?.data,
+    tagSearchError: tag?.tagSearchError,
   }));
 
   const dispatch = useDispatch();
@@ -39,8 +39,8 @@ const TagSearch = memo(() => {
     <>
       <SearchLayout />
       <StyledSearchContainerDiv>
-        <StyledTagSearchedDiv>{query && <h1>#{query.name}</h1>}</StyledTagSearchedDiv>
-        {data && data.map((post) => <PostBox key={post.id} post={post} userId={post.user.id} />)}
+        <StyledTagSearchedDiv>{query && <h1>#{query?.name}</h1>}</StyledTagSearchedDiv>
+        {data && data.map((post) => <PostBox key={post?.id} post={post} userId={post?.user?.id} />)}
       </StyledSearchContainerDiv>
     </>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {Global, HeaderBottomDiv, HeaderDateDiv, HeaderLeftDiv, HeaderSubDiv} from './style';
+import { Global, HeaderBottomDiv, HeaderDateDiv, HeaderLeftDiv, HeaderSubDiv } from './style';
 import { MoreOutlined } from '@ant-design/icons';
 
 const HomeHeader = () => {
@@ -19,10 +19,10 @@ const HomeHeader = () => {
             </Link>
           </HeaderSubDiv>
           <HeaderSubDiv>
-            <HeaderDateDiv>
+            {/* <HeaderDateDiv>
               이번 주
               <img src="/images/down.svg" alt="" />
-            </HeaderDateDiv>
+            </HeaderDateDiv> */}
           </HeaderSubDiv>
         </HeaderLeftDiv>
         <div>

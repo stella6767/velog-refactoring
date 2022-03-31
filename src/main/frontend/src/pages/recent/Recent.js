@@ -11,10 +11,10 @@ const Recent = memo((props) => {
   const [page, setPage] = useState(0);
 
   const { recentPosts, hasMorePosts, loadPostLoading, loadRecentPostsDone } = useSelector(({ post, loading }) => ({
-    recentPosts: post.recentPosts,
-    hasMorePosts: post.hasMorePosts,
+    recentPosts: post?.recentPosts,
+    hasMorePosts: post?.hasMorePosts,
     loadPostLoading: loading['LOAD_RECENT_POSTS_REQUEST'],
-    loadRecentPostsDone: post.loadRecentPostsDone,
+    loadRecentPostsDone: post?.loadRecentPostsDone,
   }));
 
   const dispatch = useDispatch();
@@ -54,10 +54,10 @@ const Recent = memo((props) => {
   return (
     <>
       <AppLayout isHome={isHome}>
-        {recentPosts.length != 0 && (
+        {recentPosts?.length != 0 && (
           <StyledMainDiv>
-            {recentPosts.map((post) => (
-              <PostCard key={post.id} post={post} loading={loadPostLoading} />
+            {recentPosts?.map((post) => (
+              <PostCard key={post?.id} post={post} loading={loadPostLoading} />
             ))}
           </StyledMainDiv>
         )}

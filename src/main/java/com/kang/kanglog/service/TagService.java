@@ -1,9 +1,9 @@
 package com.kang.kanglog.service;
 
 
-import com.kang.kanglog.domain.Post;
 import com.kang.kanglog.domain.Tag;
 import com.kang.kanglog.repository.tag.TagRepository;
+import com.kang.kanglog.web.dto.post.PostResDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,16 +21,15 @@ public class TagService {
     private final TagRepository tagRepository;
 
     @Transactional(readOnly = true)
-    public List<Post> 관련게시글찾기(String name) {
+    public List<PostResDto.PostDto> 관련게시글찾기(String name) {
 
         List<Tag> tagEntitys = tagRepository.mFindByName(name);
-        List<Post> tagPosts = new ArrayList<>();
+        List<PostResDto.PostDto> tagPosts = new ArrayList<>();
         tagEntitys.forEach((tag) -> {
-            tagPosts.add(tag.getPost());
+            PostResDto.PostDto dto = new PostResDto.PostDto(0L, tag.getPost());
+            tagPosts.add(dto);
         });
-
         log.info(String.valueOf(tagPosts.size()));
-
         return tagPosts;
     }
 

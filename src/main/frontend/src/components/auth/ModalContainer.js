@@ -36,7 +36,7 @@ const AuthModal = memo((props) => {
     }
 
     if (joinDone) {
-      alert(authData.msg);
+      alert('회원가입 성공');
       //console.log(joinDone);
 
       if (authData.statusCode === -1) {

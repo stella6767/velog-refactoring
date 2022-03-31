@@ -24,7 +24,7 @@ const LoginModal = memo((props) => {
         title="로그인"
         visible={loginVisible}
         onCancel={handleCancel}
-        width={550}
+        width={600}
         footer={[
           <div
             key="footer"

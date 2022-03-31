@@ -88,7 +88,7 @@ public class PostController {
     @PutMapping("/post/{postId}")
     public CMResDto<?> updateById(@AuthenticationPrincipal PrincipalDetails details, @PathVariable long postId, @RequestBody PostSaveReqDto postSaveReqDto){
 
-        return new CMResDto<>(1, "게시글 수정", postService.수정하기(postId, postSaveReqDto);
+        return new CMResDto<>(1, "게시글 수정", postService.수정하기(postId, postSaveReqDto));
     }
 
 }

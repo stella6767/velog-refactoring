@@ -199,7 +199,7 @@ public class PostService {
 //            List<Tag> tags =  UtilManager.parsingToTagObject(postSaveReqDto.getTags(), post);
 //            //tagRepository.saveAll(tags);
 //        }
-        
+
         return postEntity;
     }//함수 종료=>트랜잭션 종료 => 영속화 되어있는 데이터를 DB로 갱신(flush) => commit ===========>더티체킹
 

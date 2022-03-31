@@ -88,6 +88,7 @@ const AppHeader = memo((props) => {
   };
 
   const logout = () => {
+    console.log('로그아웃');
     dispatch(logoutAction());
   };
 

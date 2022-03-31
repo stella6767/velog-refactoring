@@ -13,7 +13,7 @@ const JoinModal = memo((props) => {
         title="회원가입"
         visible={joinVisible}
         onCancel={handleCancel}
-        width={550}
+        width={600}
         footer={[
           <div
             key="footer"

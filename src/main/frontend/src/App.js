@@ -26,7 +26,7 @@ function App() {
 
   useUpdateEffect(() => {
     if (logoutDone) {
-      alert(cmRespDto.msg);
+      alert('로그아웃 되었습니다.');
     }
   }, [logoutDone]);
 

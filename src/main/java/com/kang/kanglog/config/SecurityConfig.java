@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         super.configure(web);
-        //web.ignoring().mvcMatchers("/**"); //문지기가 사람들을 다 통과시켜줌
+        web.ignoring().mvcMatchers("/h2-console/**"); //문지기가 사람들을 다 통과시켜줌
     }
 
 

@@ -14,7 +14,7 @@ import java.security.Key;
 import java.util.Date;
 
 @Slf4j
-public class JWTUtils {
+public class JWTUtil {
 
 
 

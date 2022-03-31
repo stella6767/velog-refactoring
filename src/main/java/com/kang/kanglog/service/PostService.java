@@ -68,11 +68,8 @@ public class PostService {
     public Long 저장하기(PostSaveReqDto postSaveReqDto, PrincipalDetails principalDetails)  {
 
         log.info("저장하기 요청 옴.");
-
         List<String> imgUrlList = new ArrayList<>();
-
         String imgSrc = "";
-
         Document doc = Jsoup.parseBodyFragment(postSaveReqDto.getContent());
         Elements imgs = doc.getElementsByTag("img");
 

@@ -23,6 +23,7 @@ public class Post extends BaseTimeEntity {
     @Column(nullable = false,length = 100)
     private String title;
 
+    @Column(length = 5000)
     private String content;
 
     private String thumbnail;
@@ -45,13 +46,13 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
-    @Setter
-    @Transient  //칼럼이 만들어지지 않는다.
-    private int likeCount;
-
-    @Setter
-    @Transient
-    private boolean likeState;
+//    @Setter
+//    @Transient  //칼럼이 만들어지지 않는다.
+//    private int likeCount;
+//
+//    @Setter
+//    @Transient
+//    private boolean likeState;
 
 
     public Post(Long id) {

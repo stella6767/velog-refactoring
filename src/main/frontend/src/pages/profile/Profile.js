@@ -17,9 +17,9 @@ import './style.css';
 
 const Profile = () => {
   const { principal, uploadImgDone, profileImg } = useSelector(({ auth, user }) => ({
-    principal: auth.principal,
-    uploadImgDone: user.uploadImgDone,
-    profileImg: user.profileImg,
+    principal: auth?.principal,
+    uploadImgDone: user?.uploadImgDone,
+    profileImg: user?.profileImg,
   }));
 
   // const [imgFile, setImgFile] = useState();
@@ -99,7 +99,7 @@ const Profile = () => {
               <StyledImgRemoveButton onClick={notImpl}>이미지 제거</StyledImgRemoveButton>
             </StyledUserThubnailDiv>
             <StyledUserInfoDiv>
-              <h2>{principal.username}</h2>
+              <h2>{principal?.username}</h2>
               <p>이 페이지 중 벨로그 제목, 소셜 정보, 이메일 주소, 회원 탈퇴 등은 미구현 상태입니다. </p>
               {/* <button className="sc-fcdeBU eZBjgD">수정</button> */}
             </StyledUserInfoDiv>
@@ -113,7 +113,7 @@ const Profile = () => {
                 <h3>벨로그 제목</h3>
               </div>
               <div className="block-for-mobile">
-                <div className="contents">stella6767.log</div>
+                <div className="contents">{principal?.username}.log</div>
                 <div className="edit-wrapper">
                   <button className="updateBtn">수정</button>
                 </div>

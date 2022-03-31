@@ -2,10 +2,7 @@ package com.kang.kanglog.domain;
 
 
 import com.kang.kanglog.web.dto.user.Role;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -54,5 +51,8 @@ public class User extends BaseTimeEntity {
         this.password = password;
         this.role = role;
     }
+
+
+
 
 }

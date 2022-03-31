@@ -1,6 +1,8 @@
 package com.kang.kanglog.web.dto.post;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -11,14 +13,14 @@ import java.util.List;
 @Slf4j
 public class PostReqDto {
 
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Data
     public static class PostSaveReqDto {
 
         private String title;
         private String content;
         private String tags;
-
-
 
         public void refineContent(Document doc, List<String> imgUrlList, Elements imgs) {
 

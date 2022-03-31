@@ -36,7 +36,7 @@ public class LoggerAspect {
 
 
 
-    @Around("execution(* com.kang.kanglog.web..*Controller.*(..)) || within(com.kang.kanglog.service..*)")
+    //@Around("execution(* com.kang.kanglog.web..*Controller.*(..)) || within(com.kang.kanglog.service..*)")
     public Object requestLoggerAdvice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         String type = proceedingJoinPoint.getSignature().getDeclaringTypeName();
         String method = proceedingJoinPoint.getSignature().getName();

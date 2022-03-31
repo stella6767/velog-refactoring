@@ -1,13 +1,12 @@
 package com.kang.kanglog.utils.util_function;
 
 import com.kang.kanglog.utils.common.JwtProperties;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 
-public class CookieUtill  {
+public class CookieUtil {
 
     public static Cookie createNullCookie(String cookieName){
         Cookie token = new Cookie(cookieName, null);

@@ -17,11 +17,11 @@ const PostDetailHeader = memo((props) => {
   const { userId, postId, principal, postDeleteDone, postDeleteError } = props;
 
   const { post, likePostDone, likePostError, likeDeleteDone, likeDeleteError } = useSelector(({ post }) => ({
-    post: post.post,
-    likePostDone: post.likePostDone,
-    likePostError: post.likePostError,
-    likeDeleteDone: post.likeDeleteDone,
-    likeDeleteError: post.likeDeleteError,
+    post: post?.post,
+    likePostDone: post?.likePostDone,
+    likePostError: post?.likePostError,
+    likeDeleteDone: post?.likeDeleteDone,
+    likeDeleteError: post?.likeDeleteError,
   }));
 
   let history = useHistory();
@@ -32,8 +32,8 @@ const PostDetailHeader = memo((props) => {
   const [likeCount, setLikeCount] = useState(null);
 
   useEffect(() => {
-    setLikeState(post.likeState); //안 되네......
-    setLikeCount(post.likeCount);
+    setLikeState(post?.likeState); //안 되네......
+    setLikeCount(post?.likeCount);
     //console.log('likeState', post.likeState);
   }, [post]);
 
@@ -51,8 +51,8 @@ const PostDetailHeader = memo((props) => {
       dispatch(getPostAction({ userId, postId }));
       //console.log('dispatch 이후 redux store 상태가 바로 변경이 안 되므로 위처럼 다시 한 번 불러와야됨..', post);
 
-      setLikeState(post.likeState);
-      setLikeCount(post.likeCount);
+      setLikeState(post?.likeState);
+      setLikeCount(post?.likeCount);
     }
   }, [likePostError, likePostDone]);
 
@@ -61,8 +61,8 @@ const PostDetailHeader = memo((props) => {
     if (likeDeleteDone) {
       dispatch(getPostAction({ userId, postId }));
       //console.log('요렇게는 바로 반영이 되는데..', post);
-      setLikeState(post.likeState);
-      setLikeCount(post.likeCount);
+      setLikeState(post?.likeState);
+      setLikeCount(post?.likeCount);
     }
 
     if (likeDeleteError) {
@@ -103,17 +103,17 @@ const PostDetailHeader = memo((props) => {
   return (
     <>
       <div className="head-wrapper">
-        <h1>{post.title}</h1>
+        <h1>{post?.title}</h1>
 
         <StyledHeadDescDiv>
           <div className="information">
             <span className="username">
-              <Link to={userId && `/${userId}`}>{post.user.username}</Link>
+              <Link to={userId && `/${userId}`}>{post?.user?.username}</Link>
             </span>
             <span className="separator" style={{ marginLeft: '1rem' }}>
               ·
             </span>
-            <span style={{ marginLeft: '1rem' }}>{moment(post.createDate).format('YYYY년 MM월 DD일')}</span>
+            <span style={{ marginLeft: '1rem' }}>{moment(post?.createDate).format('YYYY년 MM월 DD일')}</span>
           </div>
 
           {principal != null && userId == principal.id ? (
@@ -137,9 +137,9 @@ const PostDetailHeader = memo((props) => {
           </div>
         </StyledHeadDescDiv>
         <StyledPostDetailTagDiv>
-          {post.tags.map((tag) => (
-            <StyledDetailTagLink key={tag.id} to={`/tag?name=${tag.name}`}>
-              {tag.name}
+          {post?.tags?.map((tag) => (
+            <StyledDetailTagLink key={tag?.id} to={`/tag?name=${tag?.name}`}>
+              {tag?.name}
             </StyledDetailTagLink>
           ))}
         </StyledPostDetailTagDiv>

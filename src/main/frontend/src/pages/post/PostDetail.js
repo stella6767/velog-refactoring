@@ -8,11 +8,11 @@ import { Global, StyledDetailContentDiv, StyledPostDetailContainer } from '../us
 
 const PostDetail = memo((props) => {
   const { post, getPostDone, principal, postDeleteDone, postDeleteError } = useSelector(({ post, auth }) => ({
-    post: post.post,
-    getPostDone: post.getPostDone,
-    postDeleteDone: post.postDeleteDone,
-    postDeleteError: post.postDeleteError,
-    principal: auth.principal,
+    post: post?.post,
+    getPostDone: post?.getPostDone,
+    postDeleteDone: post?.postDeleteDone,
+    postDeleteError: post?.postDeleteError,
+    principal: auth?.principal,
   }));
 
   const dispatch = useDispatch();
@@ -37,7 +37,7 @@ const PostDetail = memo((props) => {
               userId={props.match.params.userId}
               postId={props.match.params.postId}
             />
-            {post.content && <StyledDetailContentDiv dangerouslySetInnerHTML={{ __html: post.content }} />}
+            {post?.content && <StyledDetailContentDiv dangerouslySetInnerHTML={{ __html: post?.content }} />}
             <PostDetailComment
               post={post}
               userId={props.match.params.userId}

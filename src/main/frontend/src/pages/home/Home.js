@@ -11,10 +11,10 @@ const Home = () => {
   const [page, setPage] = useState(0);
 
   const { trendPosts, hasMorePosts, loadPostLoading, loadTrendPostsDone } = useSelector(({ post, loading }) => ({
-    trendPosts: post.trendPosts,
-    hasMorePosts: post.hasMorePosts,
+    trendPosts: post?.trendPosts,
+    hasMorePosts: post?.hasMorePosts,
     loadPostLoading: loading['LOAD_TREND_POSTS_REQUEST'],
-    loadTrendPostsDone: post.loadTrendPostsDone,
+    loadTrendPostsDone: post?.loadTrendPostsDone,
   }));
 
   const dispatch = useDispatch();
@@ -52,10 +52,10 @@ const Home = () => {
   return (
     <>
       <AppLayout isHome={isHome}>
-        {trendPosts.length != 0 && (
+        {trendPosts?.length != 0 && (
           <StyledMainDiv>
-            {trendPosts.map((post) => (
-              <PostCard key={post.id} post={post} loading={loadPostLoading} />
+            {trendPosts?.map((post) => (
+              <PostCard key={post?.id} post={post} loading={loadPostLoading} />
             ))}
           </StyledMainDiv>
         )}

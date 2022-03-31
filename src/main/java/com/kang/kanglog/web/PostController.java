@@ -77,7 +77,6 @@ public class PostController {
 
         log.info("게시글 싱세보기." + userId+" " + postId);
 
-
         return new CMResDto<>(1,"게시글 상세보기", postService.한건가져오기(userId, postId, details));
     }
 

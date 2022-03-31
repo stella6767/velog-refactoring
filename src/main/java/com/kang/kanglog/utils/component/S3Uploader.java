@@ -36,6 +36,8 @@ public class S3Uploader {
 
     public String putS3WithBase64(String base64Str) {
 
+        //https://stackoverflow.com/questions/57775671/resize-a-base64-string-image-in-java  리사이즈는 적용할지 고민 중.. 시간이 없으니
+
         log.info("이미지 S3 Upload");
 
         String fileName = dirName + "/" + UUID.randomUUID() + ".jpg";

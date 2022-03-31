@@ -41,8 +41,9 @@ spring:
     open-in-view: false
     properties:
       hibernate:
-        #        format_sql: true
-        default_batch_fetch_size: 100
+        jdbc:
+          default_batch_fetch_size: 100
+
 
 
 decorator:

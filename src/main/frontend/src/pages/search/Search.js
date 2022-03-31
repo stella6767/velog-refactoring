@@ -10,11 +10,11 @@ import { StyledSearchContainerDiv, StyledSearchDiv } from './style.js';
 
 const Search = (props) => {
   const { searchPosts, loading, loadSearchPostsDone, loadSearchPostsError, hasMorePosts } = useSelector(({ post, loading }) => ({
-    searchPosts: post.searchPosts,
+    searchPosts: post?.searchPosts,
     loading: loading['LOAD_SEARCH_POSTS_REQUEST'],
-    loadSearchPostsDone: post.loadSearchPostsDone,
-    loadSearchPostsError: post.loadSearchPostsError,
-    hasMorePosts: post.hasMorePosts,
+    loadSearchPostsDone: post?.loadSearchPostsDone,
+    loadSearchPostsError: post?.loadSearchPostsError,
+    hasMorePosts: post?.hasMorePosts,
   }));
 
   const [page, setPage] = useState(0);
@@ -86,7 +86,7 @@ const Search = (props) => {
             name="keyword"
           />
         </StyledSearchDiv>
-        {searchPosts != null ? searchPosts.map((post) => <PostBox key={post.id} post={post} userId={post.user.id} />) : null}
+        {searchPosts != null ? searchPosts.map((post) => <PostBox key={post?.id} post={post} userId={post?.user?.id} />) : null}
       </StyledSearchContainerDiv>
     </>
   );

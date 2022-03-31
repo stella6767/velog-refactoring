@@ -1,6 +1,5 @@
 package com.kang.kanglog.utils.util_function;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kang.kanglog.config.security.PrincipalDetails;
 import com.kang.kanglog.domain.Post;
 import com.kang.kanglog.domain.Tag;
@@ -10,23 +9,13 @@ import com.kang.kanglog.utils.common.CMResDto;
 import com.kang.kanglog.utils.common.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -34,16 +23,13 @@ import java.util.function.Predicate;
 public class UtilManager {
 
 
-
-
     /**
-     * 메디에이터 패턴 적용..
+     *
      */
-
 
     private UtilManager() { //외부에서 new 못하도록 막아놓고.
     }
-    //방법 4 = static inner 클래스 사용
+    //방법 4 = static inner 클래스 사용, 사실 전부 static method라 요런 방법 필요없긴 한데, 나중을 대비해서,,
     private static class UtilManagerHolder {
         private static final UtilManager INSTANCE = new UtilManager();
     }
@@ -52,26 +38,30 @@ public class UtilManager {
     }
 
 
+
+
+
+
     /**
      *
      */
 
     public static List<Tag> parsingToTagObject(String tags, Post postEntity){
 
-        return CMUtills.parsingToTagObject(tags,postEntity);
+        return CMUtil.parsingToTagObject(tags,postEntity);
     }
 
 
 
     public static Map<String, Object> getHeadersInfo(HttpServletRequest request) {
 
-        return CMUtills.getHeadersInfo(request);
+        return CMUtil.getHeadersInfo(request);
     }
 
 
     public static <T> boolean filterBoolean(List<T> list, Predicate<T> filter) {
 
-        return CMUtills.filterBoolean(list,filter);
+        return CMUtil.filterBoolean(list,filter);
     }
 
 
@@ -81,15 +71,27 @@ public class UtilManager {
     }
 
 
+    /**
+     * 이미지 관련
+     */
+
+
     public static String getImgSrc(String str) {
 
-        return CMUtills.getImgSrc(str);
+        return ImageUtil.getImgSrc(str);
     }
 
     public static List<String> getImgSrcList(String str) {
 
-        return CMUtills.getImgSrcList(str);
+        return ImageUtil.getImgSrcList(str);
     }
+
+    public static String fileToBase64String(File file) {
+
+        return ImageUtil.fileToBase64String(file);
+    }
+
+
 
 
     /**
@@ -121,17 +123,17 @@ public class UtilManager {
 
 
     public static Cookie createNullCookie(String cookieName){
-        return CookieUtill.createNullCookie(cookieName);
+        return CookieUtil.createNullCookie(cookieName);
     }
 
 
     public static Cookie createCookie(String cookieName, String value){
-        return CookieUtill.createCookie(cookieName,value);
+        return CookieUtil.createCookie(cookieName,value);
     }
 
     public static Cookie getCookie(HttpServletRequest req, String cookieName){
 
-        return CookieUtill.getCookie(req,cookieName);
+        return CookieUtil.getCookie(req,cookieName);
     }
 
 
@@ -141,34 +143,34 @@ public class UtilManager {
 
 
     public static Claims extractAllClaims(String token) throws ExpiredJwtException {
-        return JWTUtils.extractAllClaims(token);
+        return JWTUtil.extractAllClaims(token);
     }
 
     public static Long getUserId(String token) {
 
-        return JWTUtils.getUserId(token);
+        return JWTUtil.getUserId(token);
     }
 
     public static Boolean isTokenExpired(String token) {
-        return JWTUtils.isTokenExpired(token);
+        return JWTUtil.isTokenExpired(token);
     }
 
 
 
     public static String generateAccessToken(Long userId) {
 
-        return JWTUtils.generateAccessToken(userId);
+        return JWTUtil.generateAccessToken(userId);
     }
 
     public static String generateRefreshToken(Long userId) {
 
-        return JWTUtils.generateRefreshToken(userId);
+        return JWTUtil.generateRefreshToken(userId);
     }
 
 
 
     public static Boolean validateToken(String token, User user) {
-        return JWTUtils.validateToken(token, user);
+        return JWTUtil.validateToken(token, user);
 
     }
 

@@ -2,6 +2,7 @@ package com.kang.kanglog.repository.post;
 
 
 import com.kang.kanglog.domain.Post;
+import com.kang.kanglog.domain.QLike;
 import com.kang.kanglog.domain.QPost;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -15,6 +16,7 @@ import javax.persistence.EntityManager;
 
 import java.util.List;
 
+import static com.kang.kanglog.domain.QLike.*;
 import static com.kang.kanglog.domain.QPost.*;
 
 
@@ -81,6 +83,23 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         // from
         // (select postId, count(postId) likeCount from Likes group by postId order by 2 desc)
         // t)
+
+
+        List<Post> posts = queryFactory
+                .selectFrom(post)
+                .join(post.likes, like)
+                .orderBy(like.post.id.count().desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+
+        for (Post post : posts) {
+
+            log.info("post=> " + post);
+
+        }
+
 
 //        queryFactory
 //                .selectFrom(post)

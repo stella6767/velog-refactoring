@@ -29,6 +29,7 @@ public class LikesService {
         return likesRepository.save(like);
     }
 
+
     @Transactional
     public long 싫어요(Long postId, Long principalId) {
 

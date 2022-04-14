@@ -28,7 +28,7 @@ public class CommentController {
     @LoginCheck
     @DeleteMapping("/comment/{id}")
     public CMResDto<?> deleteById(@PathVariable Long id, @AuthenticationPrincipal PrincipalDetails details){
-        log.info("댓글 삭제" + id);
+        //log.info("댓글 삭제" + id);
         return  new CMResDto<>(commentService.삭제하기(id, details.getUser().getId()) ,"댓글 삭제", null);
     }
 

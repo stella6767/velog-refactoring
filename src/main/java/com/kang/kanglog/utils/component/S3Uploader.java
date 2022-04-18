@@ -54,14 +54,9 @@ public class S3Uploader {
             amazonS3Client.setObjectAcl(bucket, fileName, CannedAccessControlList.PublicRead);
             //amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
 
-
         }catch (Exception e){
-
             e.printStackTrace();
-
         }
-
-
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 

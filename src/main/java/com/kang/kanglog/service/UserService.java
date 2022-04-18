@@ -8,6 +8,7 @@ import com.kang.kanglog.repository.like.LikeRepository;
 import com.kang.kanglog.repository.post.PostRepository;
 import com.kang.kanglog.repository.tag.TagRepository;
 import com.kang.kanglog.repository.user.UserRepository;
+import com.kang.kanglog.utils.component.S3Uploader;
 import com.kang.kanglog.web.dto.post.PostResDto;
 import com.kang.kanglog.web.dto.user.UserRespDto;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -30,41 +35,31 @@ public class UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
-    private final PostRepository postRepository;
-
     private final LikeRepository likeRepository;
     private final TagRepository tagRepository;
-
+    private final S3Uploader s3Uploader;
 
     @Transactional//더티체킹 todo s3로 대체할 지 고민해봐야겠다.
     public User 회원사진변경(MultipartFile profileImageFile, PrincipalDetails principalDetails, HttpServletRequest request) {
 
-//        UUID uuid = UUID.randomUUID(); //같은 이름의 사진이 들어오면 충돌나므로 방지하기 위해
-//        String imageFileName = uuid+"_"+profileImageFile.getOriginalFilename();
-//        System.out.println("파일명 : "+imageFileName);
-//
-//        Path imageFilePath = Paths.get(uploadFolder+imageFileName);
-//        System.out.println("파일패스 : "+imageFilePath);
-//
-//        String imageUrl = "http://localhost:" +  request.getLocalPort() + "/upload/" + imageFileName;
-//        log.info(request.getLocalAddr() + " " + request.getRequestURI());
-//        log.info("imageUrl: " + imageUrl);
-//
-//        try {
-//            Files.write(imageFilePath, profileImageFile.getBytes());
-//            System.out.println();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        User userEntity = userRepository.findById(principalDetails.getUser().getId()).get();
-//        //userEntity.setPicture(imageFileName); //풀경로는 안넣어도 되는게,
-//        //userEntity.setProfileImgUrl(imageUrl);
-//
-//        return userEntity;
-//
+        UUID uuid = UUID.randomUUID(); //같은 이름의 사진이 들어오면 충돌나므로 방지하기 위해
+        String imageFileName = uuid+"_"+profileImageFile.getOriginalFilename();
+        log.info("파일명 : "+imageFileName);
 
-        return null;
+        String uploadPath = "";
+        try {
+            uploadPath = s3Uploader.upload(profileImageFile, imageFileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Path imageFilePath = Paths.get(uploadPath);
+        log.info("파일패스 : "+uploadPath);
+
+        User userEntity = userRepository.findById(principalDetails.getUser().getId()).get();
+        userEntity.setPicture(uploadPath); //풀경로는 안넣어도 되는게,
+        //userEntity.setProfileImgUrl(imageUrl);
+
+        return userEntity;
     }
 
 

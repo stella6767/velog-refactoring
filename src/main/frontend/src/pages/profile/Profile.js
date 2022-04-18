@@ -1,3 +1,4 @@
+import useUpdateEffect from 'lib/hooks/useUpdateEffect';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../../components/AppLayout';
@@ -16,10 +17,9 @@ import {
 import './style.css';
 
 const Profile = () => {
-  const { principal, uploadImgDone, profileImg } = useSelector(({ auth, user }) => ({
+  const { principal, uploadImgDone } = useSelector(({ auth, user }) => ({
     principal: auth?.principal,
     uploadImgDone: user?.uploadImgDone,
-    profileImg: user?.profileImg,
   }));
 
   // const [imgFile, setImgFile] = useState();
@@ -27,13 +27,15 @@ const Profile = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     if (uploadImgDone) {
-      console.log('profileImg', profileImg); //약간의 시간적 오차가 있음
       //기본적으로 새로고침하면 state 값 상실,
+      console.log('확인', principal?.picture);
+
+      location.reload();
     }
     //console.log('profileImg', profileImg);
-  }, [uploadImgDone, profileImg]);
+  }, [uploadImgDone]);
 
   const imageInput = useRef();
 
@@ -84,7 +86,7 @@ const Profile = () => {
         {principal && (
           <StyledUserDescTopSection>
             <StyledUserThubnailDiv>
-              <StyledProfileImg src={profileImg} alt="" ref={userImg} />
+              <StyledProfileImg src={principal?.picture} alt="" ref={userImg} />
 
               <input
                 type="file"
@@ -100,7 +102,7 @@ const Profile = () => {
             </StyledUserThubnailDiv>
             <StyledUserInfoDiv>
               <h2>{principal?.username}</h2>
-              <p>이 페이지 중 벨로그 제목, 소셜 정보, 이메일 주소, 회원 탈퇴 등은 미구현 상태입니다. </p>
+              <p>소셜 정보 및 로그인, 이메일 주소, 회원 탈퇴, 프로필 사진 업로드 등은 차후 구현예정? </p>
               {/* <button className="sc-fcdeBU eZBjgD">수정</button> */}
             </StyledUserInfoDiv>
           </StyledUserDescTopSection>
@@ -123,7 +125,7 @@ const Profile = () => {
           <StyledSubDetailDiv>
             <div className="wrapper">
               <div className="title-wrapper">
-                <h3>소셜 정보</h3>
+                <h3>제작자 소셜 정보</h3>
               </div>
               <div className="block-for-mobile">
                 <div className="contents">
@@ -133,6 +135,9 @@ const Profile = () => {
                     </li>
                     <li>
                       <span>https://blog.naver.com/alsrb9434</span>
+                    </li>
+                    <li>
+                      <span>https://velog.io/@stella6767</span>
                     </li>
                   </ul>
                 </div>

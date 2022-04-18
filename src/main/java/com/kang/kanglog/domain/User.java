@@ -27,6 +27,7 @@ public class User extends BaseTimeEntity {
     @Column
     private String email; //소셜가입이 아닌 사람은 이메일이 없도록..
 
+    @Setter
     @Column  //이거 구현하기 귀찮아서 할지 말지 생각중..
     private String picture;
 

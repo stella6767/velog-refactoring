@@ -87,7 +87,6 @@ const user = handleActions(
       uploadImgError: null,
       uploadImgDone: true,
       cmRespDto: data,
-      profileImg: data.data,
     }),
     [IMG_PUT_FAILURE]: (state, { payload: error }) => ({
       ...state,

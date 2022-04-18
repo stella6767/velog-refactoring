@@ -99,7 +99,7 @@ public class UserService {
             return null;
         }
 
-        //동일한 양식으로 프론트에게 돌려줘야겠당.
+        //동일한 양식으로 프론트에게 돌려줘야겠당. 사실 갈아엎고 싶긴  한데, 시간도 없으니까.
         Page<PostResDto.PostDto> likePosts = posts.map(like -> {
             PostResDto.PostDto postDto = PostResDto.PostDto.builder()
                     .id(like.getPost().getId())

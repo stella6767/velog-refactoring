@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @LoginCheck
-    @DeleteMapping("/user")
+    @DeleteMapping("/user") //미구현
     public CMResDto<?> deleteById(@AuthenticationPrincipal PrincipalDetails details){
 
         return new CMResDto<>(userService.회원탈퇴(details.getUser().getId()), "회원 탈퇴", null);

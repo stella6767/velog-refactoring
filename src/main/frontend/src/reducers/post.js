@@ -13,6 +13,7 @@ const [LOAD_SEARCH_POSTS_REQUEST, LOAD_SEARCH_POSTS_SUCCESS, LOAD_SEARCH_POSTS_F
   createRequestActionTypes('LOAD_SEARCH_POSTS');
 const [ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE] = createRequestActionTypes('ADD_POST');
 const [GET_POST_REQUEST, GET_POST_SUCCESS, GET_POST_FAILURE] = createRequestActionTypes('GET_POST');
+const [UPDATE_POST_REQUEST, UPDATE_POST_SUCCESS, UPDATE_POST_FAILURE] = createRequestActionTypes('UPDATE_POST');
 const [LIKE_POST_REQUEST, LIKE_POST_SUCCESS, LIKE_POST_FAILURE] = createRequestActionTypes('LIKE_POST');
 const [LIKE_DELETE_REQUEST, LIKE_DELETE_SUCCESS, LIKE_DELETE_FAILURE] = createRequestActionTypes('LIKE_DELETE');
 const [POST_DELETE_REQUEST, POST_DELETE_SUCCESS, POST_DELETE_FAILURE] = createRequestActionTypes('POST_DELETE');
@@ -22,6 +23,7 @@ export const loadRecentPostsAction = createAction(LOAD_RECENT_POSTS_REQUEST, (da
 export const loadTrendPostsAction = createAction(LOAD_TREND_POSTS_REQUEST, (data) => data);
 export const loadSearchPostsAction = createAction(LOAD_SEARCH_POSTS_REQUEST, ({ page, keyword }) => ({ page, keyword }));
 export const addPostAction = createAction(ADD_POST_REQUEST, (data) => data);
+export const updatePostAction = createAction(UPDATE_POST_REQUEST, (postId, data) => ({ postId, data }));
 export const getPostAction = createAction(GET_POST_REQUEST, ({ userId, postId }) => ({ userId, postId }));
 export const likePostAction = createAction(LIKE_POST_REQUEST, (data) => data);
 export const likeDeleteAction = createAction(LIKE_DELETE_REQUEST, (data) => data);
@@ -32,6 +34,7 @@ const loadRecentPostsSaga = createRequestSaga(LOAD_RECENT_POSTS_REQUEST, postAPI
 const loadTrendPostsSaga = createRequestSaga(LOAD_TREND_POSTS_REQUEST, postAPI.trendList);
 const loadSearchPostsSaga = createRequestSaga(LOAD_SEARCH_POSTS_REQUEST, postAPI.searchList);
 const addPostSaga = createRequestSaga(ADD_POST_REQUEST, postAPI.post);
+const updatePostSaga = createRequestSaga(UPDATE_POST_REQUEST, postAPI.update);
 const getPostSaga = createRequestSaga(GET_POST_REQUEST, postAPI.detail);
 const likePostSaga = createRequestSaga(LIKE_POST_REQUEST, postAPI.like);
 const likeDeleteSaga = createRequestSaga(LIKE_DELETE_REQUEST, postAPI.unlike);
@@ -44,6 +47,7 @@ export function* postSaga() {
   yield throttle(3000, LOAD_SEARCH_POSTS_REQUEST, loadSearchPostsSaga);
   yield takeLatest(ADD_POST_REQUEST, addPostSaga);
   yield takeLatest(GET_POST_REQUEST, getPostSaga);
+  yield takeLatest(UPDATE_POST_REQUEST, updatePostSaga);
   yield takeLatest(LIKE_POST_REQUEST, likePostSaga);
   yield takeLatest(LIKE_DELETE_REQUEST, likeDeleteSaga);
   yield takeLatest(POST_DELETE_REQUEST, postDeleteSaga);
@@ -70,6 +74,10 @@ const initialState = {
   //게시글 삭제
   postDeleteDone: false,
   postDeleteError: null,
+
+  //게시글 수정
+  postUpdateDone: false,
+  postUpdateError: null,
 
   //게시글 상세보기
   getPostDone: false,
@@ -192,7 +200,23 @@ const post = handleActions(
       ...state,
       addPostError: error,
     }),
-
+    //게시글 수정
+    [UPDATE_POST_REQUEST]: (state, { payload: data }) =>
+      produce(state, (draft) => {
+        draft.cmRespDto = data;
+        draft.updatePostDone = false;
+        draft.updatePostError = null;
+      }),
+    [UPDATE_POST_SUCCESS]: (state, { payload: data }) => ({
+      ...state,
+      updatePostError: null,
+      updatePostDone: true,
+      addPostId: data.data,
+    }),
+    [UPDATE_POST_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      updatePostError: error,
+    }),
     //게시글 상세보기
     [GET_POST_REQUEST]: (state, { payload: data }) =>
       produce(state, (draft) => {

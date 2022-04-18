@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Global, StyledButtonDiv } from './style';
 import { Input, Form, Button } from 'antd';
 import { useDispatch } from 'react-redux';
-import { addPostAction, getPostAction } from '../../reducers/post';
+import { addPostAction, getPostAction, updatePostAction } from '../../reducers/post';
 import useUpdateEffect from '../../lib/hooks/useUpdateEffect';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -15,16 +15,15 @@ const StyledPostDiv = styled.div`
 `;
 
 const UpdateForm = memo((props) => {
-  const { addPostDone, principal, postId, post, getPostDone } = useSelector(({ post, auth }) => ({
-    addPostDone: post?.addPostDone,
+  const { updatePostDone, principal, postId, post, getPostDone } = useSelector(({ post, auth }) => ({
+    updatePostDone: post?.updatePostDone,
     principal: auth?.principal,
     postId: post?.addPostId,
     post: post?.post,
     getPostDone: post?.getPostDone,
   }));
 
-  //let { slug } = useParams();
-
+  const { params } = props.match;
   const [value, setvalue] = useState('');
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -37,20 +36,29 @@ const UpdateForm = memo((props) => {
   }, []);
 
   useUpdateEffect(() => {
-    if (addPostDone) {
+    if (updatePostDone) {
       //history go postdetail
-      console.log('저장하기 성공');
-      props.history.replace(`/${principal.id}/${postId}`);
+      console.log('수정하기 성공');
+      props.history.replace(`/${principal.id}/${params.postId}`);
     }
-  }, [addPostDone, postId]);
+  }, [updatePostDone, postId]);
 
   useUpdateEffect(() => {
     console.log('post ', post);
   }, [getPostDone]);
 
   const onPostFinish = (values) => {
-    //console.log('post 제출함', values);
-    //dispatch(addPostAction(values));
+    console.log('post 수정 제출', values, params.postId);
+
+    let postId = params.postId;
+
+    if (!values.tags.length) {
+      console.log('확인1', values.tags);
+
+      values.tags = '';
+    }
+
+    dispatch(updatePostAction(postId, values));
   };
 
   // const exitForm = useCallback(() =>{
@@ -88,6 +96,7 @@ const UpdateForm = memo((props) => {
             <Form.Item name="tags" initialValue={post?.tags}>
               <Input placeholder="#태그는 수정 시 새로 입력해주셔야 됩니다. 제가 그정도까지 신경을 쓰진 않아서" />
             </Form.Item>
+
             <Form.Item name="content">
               {/* {!post?.content ? (
                 <TextEditor name="content" value={post?.content} onChange={(value) => setvalue(value)}></TextEditor>

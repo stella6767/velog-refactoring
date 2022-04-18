@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import java.util.Map;
+
 import static com.kang.kanglog.web.dto.user.UserReqDto.*;
 
 @RequiredArgsConstructor
@@ -48,16 +50,16 @@ public class AuthController {
     }
 
 
-//    //소셜 로그인
-//    @PostMapping("/auth/oauthLogin")
-//    public CMResDto<?> oauthLogin(@RequestBody Map<String, Object> data, HttpServletResponse response) {
-//        log.info("소셜 로그인 진행: " + data);
-//
-//        User userEntity = getUserEntity(data, response);
-//
-//        //return new CMResDto<>(1,"로그인성공", jwtService.makeLoginRespDto(userEntity));
-//        return new CMResDto(1, "로그인성공", jwtService.makeLoginRespDto(userEntity));
-//    }
+    //소셜 로그인
+    @PostMapping("/auth/oauthLogin")
+    public CMResDto<?> oauthLogin(@RequestBody Map<String, Object> data, HttpServletResponse response) {
+        log.info("소셜 로그인 진행: " + data);
+
+        //User userEntity = getUserEntity(data, response);
+
+        //return new CMResDto<>(1,"로그인성공", jwtService.makeLoginRespDto(userEntity));
+        return new CMResDto(1, "상용에서 구현 X", null);
+    }
 
 
 }

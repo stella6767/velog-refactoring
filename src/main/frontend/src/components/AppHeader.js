@@ -151,7 +151,7 @@ const AppHeader = memo((props) => {
             ) : (
               <>
                 <StyledLoginSuccessDiv>
-                  <StyledDropdown overlay={() => menu(principal.id)} trigger={['click']}>
+                  <StyledDropdown overlay={() => menu(principal?.id)} trigger={['click']}>
                     <div
                       className="ant-dropdown-link"
                       onClick={(e) => e.preventDefault()}

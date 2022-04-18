@@ -93,10 +93,14 @@ const auth = handleActions(
         draft.principal = data.data;
       }),
     //로그인 실패
-    [LOGIN_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      loginError: error,
-    }),
+    [LOGIN_FAILURE]: (state, { payload: error }) => {
+      alert('로그인 실패');
+
+      return {
+        ...state,
+        loginError: error,
+      };
+    },
     //로그아웃 시도
     [LOGOUT_REQUEST]: (state, { payload: data }) =>
       produce(state, (draft) => {

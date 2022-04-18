@@ -10,6 +10,7 @@ const client = axios.create();
 client.defaults.headers.common['Authorization'] = 'Bearer a1b2c3d4';
 
 client.defaults.headers.post['Content-Type'] = 'application/json; charset=UTF-8'; //json으로 던지기 위해서..
+client.defaults.headers.put['Content-Type'] = 'application/json; charset=UTF-8'; //json으로 던지기 위해서..
 
 //client.defaults.headers.common['Authorization'] = localStorage.getItem('accessToken'); //여기서 문제가 발생했네.. 초기값으록 고정됐나보다.
 

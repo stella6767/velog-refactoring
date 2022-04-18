@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletResponse;
 
 @RequiredArgsConstructor
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+
 
 
     @ExceptionHandler(value = IllegalArgumentException.class)

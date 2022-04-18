@@ -3,6 +3,11 @@ import client from './client';
 //게시글 작성
 export const post = (data) => client.post('/post', JSON.stringify(data));
 
+export const update = ({ postId, data }) => {
+  //console.log('??', data);
+
+  return client.put(`/post/${postId}`, JSON.stringify(data));
+};
 //게시글 삭제
 export const deletePost = (postId) => client.delete(`/post/${postId}`);
 

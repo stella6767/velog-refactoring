@@ -29,15 +29,15 @@ spring:
       password: 1234
 
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:file:~/testdb #?????? ?????.
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://springboot-db.cddrlz0fcikb.ap-northeast-2.rds.amazonaws.com:3306/kanglog?serverTimezone=Asia/Seoul
     username: kang
-    password:
+    password: 1234
 
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     #    show-sql: true

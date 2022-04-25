@@ -11,14 +11,26 @@
 ## 벡엔드
 - springboot
 - Intellij
-- gradle
+- gradle 7.4.1
 - java 11
 - jpa
+- mariaDB - AWS RDS
 
 
 ## 프론트엔드
-- node.js
-- react
+- node.js 16.13.2
+- react 17.0.2
+- redux / redux-saga
+- axios
+- styled component
+- antd
+- dotenv
+- react-quill
+
+## dev
+- AWS EC2
+- AWS S3
+- Travis CI
 
 
 굳이 JWT를 쓰는 이유

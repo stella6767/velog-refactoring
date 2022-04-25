@@ -34,7 +34,15 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadUserAction());
+    //dispatch(loadUserAction());
+
+    fetch('/hello')
+      .then((response) => {
+        return response.json();
+      })
+      .then(function (data) {
+        alert(data);
+      });
   }, []);
 
   return (

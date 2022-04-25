@@ -15,11 +15,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 public class TestController {
 
     private static final Logger log = LoggerFactory.getLogger(TestController.class);
+
+
+    @GetMapping("hello")
+    public List<String> hello() {
+
+        System.out.println("?????");
+        return Arrays.asList("안녕하세요", "Hello");
+    }
+
 
     @GetMapping("user/test")
     public CMResDto<?> testUser(@AuthenticationPrincipal PrincipalDetails principalDetails){

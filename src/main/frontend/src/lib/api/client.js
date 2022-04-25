@@ -5,7 +5,8 @@ const client = axios.create();
 // 글로벌 설정 참고: https://fkkmemi.github.io/nemv/nemv-053-axios-interceptor/
 
 // //API 주소
-//client.defaults.baseURL = 'http://localhost:8080/';
+client.defaults.baseURL = `${process.env.REACT_APP_URL}`;
+//client.defaults.baseURL = `http://localhost:9090/`;
 // //헤더 설정
 client.defaults.headers.common['Authorization'] = 'Bearer a1b2c3d4';
 

@@ -1,11 +1,9 @@
-
 // 1. queryDsl version 정보 추가
 buildscript {
     ext {
         queryDslVersion = "5.0.0"
     }
 }
-
 plugins {
     id 'org.springframework.boot' version '2.6.5'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -18,50 +16,12 @@ plugins {
 
 group = 'com.kang'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
-
-configurations {
-    jar.archiveName = 'kanglog.jar'
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
+sourceCompatibility = '1.8'
 
 repositories {
     mavenCentral()
 }
 
-// querydsl에서 사용할 경로 설정
-def querydslDir = "$buildDir/generated/querydsl" // (3)
-
-
-def webappDir = "$projectDir/src/main/frontend"
-
-
-
-// JPA 사용 여부와 사용할 경로를 설정
-querydsl {
-    jpa = true
-    querydslSourcesDir = querydslDir
-}
-
-// build 시 사용할 sourceSet 추가
-sourceSets { // (5)
-    main.java.srcDir querydslDir
-}
-
-// querydsl 이 compileClassPath 를 상속하도록 설정
-configurations { // (6)
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-    querydsl.extendsFrom compileClasspath
-}
-
-// querydsl 컴파일시 사용할 옵션 설정
-compileQuerydsl { // (7)
-    options.annotationProcessorPath = configurations.querydsl
-}
 
 dependencies {
 
@@ -121,32 +81,85 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
+
+
 tasks.named('test') {
     useJUnitPlatform()
 }
 
+// querydsl에서 사용할 경로 설정
+def querydslDir = "$buildDir/generated/querydsl" // (3)
+//def webappDir = "$projectDir/src/main/frontend"
 
-task buildReact(type: Exec) {
-    dependsOn "installReact"
-    workingDir "$webappDir"
-    inputs.dir "$webappDir"
-    group = BasePlugin.BUILD_GROUP
-    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-        commandLine "npm.cmd", "run-script", "build"
-    } else {
-        commandLine "npm", "run-script", "build"
-    }
+// build 시 사용할 sourceSet 추가
+sourceSets {
+    main.java.srcDir querydslDir
+//    main {
+//        java {
+//            srcDirs = ['src/main/java', querydslDir]
+//        }
+//
+//        resources {
+//            srcDirs = ["$projectDir/src/main/resources"]
+//        }
+//    }
 }
 
-task installReact(type: Exec) {
-    workingDir "$webappDir"
-    inputs.dir "$webappDir"
-    group = BasePlugin.BUILD_GROUP
-    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-        commandLine "npm.cmd", "audit", "fix"
-        commandLine 'npm.cmd', 'install'
-    } else {
-        commandLine "npm", "audit", "fix"
-        commandLine 'npm', 'install'
-    }
+//
+//processResources {
+//    dependsOn "copyReactBuildFiles"
+//}
+
+
+// JPA 사용 여부와 사용할 경로를 설정
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
 }
+
+
+// querydsl 이 compileClassPath 를 상속하도록 설정
+configurations { // (6)
+    jar.archiveName = 'kanglog.jar'
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
+
+// querydsl 컴파일시 사용할 옵션 설정
+compileQuerydsl { // (7)
+    options.annotationProcessorPath = configurations.querydsl
+}
+
+//
+//task installReact(type: Exec) {
+//    workingDir "$webappDir"
+//    inputs.dir "$webappDir"
+//    group = BasePlugin.BUILD_GROUP
+//    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+//        commandLine "npm.cmd", "audit", "fix"
+//        commandLine 'npm.cmd', 'install'
+//    } else {
+//        commandLine "npm", "audit", "fix"
+//        commandLine 'npm', 'install'
+//    }
+//}
+//
+//task buildReact(type: Exec) {
+//    dependsOn "installReact"
+//    workingDir "$webappDir"
+//    inputs.dir "$webappDir"
+//    group = BasePlugin.BUILD_GROUP
+//    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+//        commandLine "npm.cmd", "run-script", "build"
+//    } else {
+//        commandLine "npm", "run-script", "build"
+//    }
+//}
+//
+//task copyReactBuildFiles(type: Copy) {
+//    dependsOn "buildReact"
+//    from "$webappDir/build"
+//    into "$projectDir/src/main/resources/static"
+//}

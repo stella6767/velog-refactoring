@@ -1,5 +1,6 @@
 
 
+
 server:
   servlet:
     context-path: /
@@ -7,6 +8,11 @@ server:
       charset: utf-8
       enabled: true
 spring:
+  config:
+    import: "optional:configserver:http://localhost:8888"
+  cloud:
+    config:
+      name: kanglog
   servlet:
     multipart:
       max-file-size: 10MB
@@ -21,60 +27,58 @@ spring:
 ---
 
 
-
-server:
-  port: 9090
-  servlet:
-
-spring:
-  config:
-    activate:
-      on-profile:
-        - local
-
-
-  cache:
-    type: redis
-  redis:
-
-    host: 127.0.0.1
-    port: 6397
-
-    lettuce:
-      pool:
-        max-active: 10
-        max-idle: 10
-        min-idle: 5
-
-  security:
-    user:
-      name: java
-      password: 1234
-
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:file:~/testdb #?????? ?????.
-    username: kang
-    password:
-
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    #    show-sql: true
-    open-in-view: false
-    properties:
-      hibernate:
-        #        format_sql: true
-        jdbc:
-          default_batch_fetch_size: 100
-
-
-decorator:
-  datasource:
-    p6spy:
-      enable-logging: true
-
-
+#
+#server:
+#  port: 9090
+#  servlet:
+#
+#spring:
+#  config:
+#    activate:
+#      on-profile:
+#        - local
+#
+#
+#  cache:
+#    type: redis
+#  redis:
+#
+#    host: 127.0.0.1
+#    port: 6397
+#
+#    lettuce:
+#      pool:
+#        max-active: 10
+#        max-idle: 10
+#        min-idle: 5
+#
+#  security:
+#    user:
+#      name: java
+#      password: 1234
+#
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:file:~/testdb #?????? ?????.
+#    username: kang
+#    password:
+#
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#      naming:
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#    #    show-sql: true
+#    open-in-view: false
+#    properties:
+#      hibernate:
+#        #        format_sql: true
+#        jdbc:
+#          default_batch_fetch_size: 100
+#
+#
+#decorator:
+#  datasource:
+#    p6spy:
+#      enable-logging: true

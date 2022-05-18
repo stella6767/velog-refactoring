@@ -23,7 +23,23 @@ repositories {
 }
 
 
+//추가!
+ext {
+    set('springCloudVersion', "2021.0.2")
+}
+
+
+//추가!
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
 dependencies {
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+
 
     implementation 'com.github.javafaker:javafaker:1.0.2'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE'
@@ -163,3 +179,4 @@ compileQuerydsl { // (7)
 //    from "$webappDir/build"
 //    into "$projectDir/src/main/resources/static"
 //}
+
